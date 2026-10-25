@@ -155,7 +155,7 @@ body.dark .ghost-btn{color:#8fd0b6}
     <span class="arr">→</span>
   </button>
   <div id="shelves"></div>
-  <p class="notice">物語はすべて書き下ろしのオリジナルです。単語の下線（点線）をタップすると意味が表示され、単語帳に登録できます。文をタップすると、その文から音声を再生できます。</p>
+  <p class="notice">物語は書き下ろしオリジナルと、パブリックドメインの名作を新たに書き直した「名作コレクション」です。単語の下線（点線）をタップすると意味が表示され、単語帳に登録できます。文をタップすると、その文から音声を再生できます。</p>
 </section>
 
 <!-- ===== リーダー ===== -->
@@ -686,6 +686,188 @@ STORIES.push(
 </script>
 
 <script>
+/* ================= 名作コレクション（原典はパブリックドメイン／新たに書き直し） ================= */
+STORIES.push(
+{ id:"after20", classic:true, cover:"🤝", title:"After Twenty Years", titleJa:"二十年後", level:2, genre:"名作文学",
+  intro:"O・ヘンリーの名短編を、原典（『The Four Million』1906年、Project Gutenberg、パブリックドメイン）から新たにやさしく書き直しました。20年前の約束を守ってニューヨークに来た男と、巡回中の警官の物語です。",
+  grammar:{ title:"過去形と過去進行形の使い分け", body:"過去形は「〜した」という完了した出来事、過去進行形（was / were ＋ 〜ing）は「そのとき〜していた」という場面の広がりを表します。本文の \"The policeman on his beat was walking slowly along the street\"（警官はゆっくり歩いていた）が過去進行形で、物語の舞台を描きます。そこへ \"a man stepped out\"（男が一歩出た）のような過去形が入ると、出来事が前に進みます。この2つの組み合わせが英語の物語の基本の呼吸です。",
+    example:"The policeman on his beat was walking slowly along the street.",
+    exercise:{ q:"次の文の（ ）に入る語句は？ \"At ten last night, I ( ) home.\"", choices:["walk","was walking","walks"], answer:1, why:"「昨夜10時の時点で家へ歩いていた」という場面なので、過去進行形 was walking が入ります。" } },
+  vocab:[
+    {w:"appointment", m:"会う約束・アポイント", s:"He had an appointment tonight."},
+    {w:"doorway", m:"入口・戸口", s:"In the doorway of a dark shop, a man was waiting."},
+    {w:"beat", m:"（警官の）受け持ち区域・見回り", s:"The policeman on his beat was walking slowly along the street."},
+    {w:"match", m:"マッチ", s:"The man lit a match and put a cigar in his mouth."},
+    {w:"cigar", m:"葉巻", s:"The man lit a match and put a cigar in his mouth."},
+    {w:"west", m:"西部・西", s:"I went west to make my money."},
+    {w:"sharp", m:"鋭い・はっきりした", s:"His eyes were sharp and bright."},
+    {w:"wanted", m:"指名手配されている", s:"I saw a wanted man's face."},
+    {w:"arrest", m:"逮捕する", s:"I cannot arrest my old friend myself."},
+    {w:"note", m:"短い手紙・メモ", s:"It is a note from Jimmy."}],
+  phrases:[
+    {en:"We made an appointment twenty years ago, here, in this place.", ja:"私たちは20年前、ここで会う約束をしました。"},
+    {en:"I am waiting for a friend.", ja:"友人を待っているのです。"},
+    {en:"I cannot arrest my old friend myself.", ja:"私には、旧友を自分で逮捕することはできません。"}],
+  quiz:[
+    {q:"Why did Bob come to New York?", choices:["To find a new job","To keep an appointment with his friend Jimmy","To visit a dark shop"], answer:1, why:"20年前の今日、同じ場所で会うというジミーとの約束を守るために来ました。"},
+    {q:"Where did Bob live for twenty years?", choices:["In New York","In Chicago only","In the west"], answer:2, why:"ボブは西部へ行き、そこでお金を稼いで暮らしてきました。"},
+    {q:"Who was the policeman on the beat?", choices:["Jimmy Wells","A stranger","Bob's brother"], answer:0, why:"見回りの警官こそ、約束の相手ジミー・ウェルズでした。"},
+    {q:"Why did Jimmy not arrest Bob himself?", choices:["He did not know Bob","Bob ran away","He could not arrest his old friend himself, so he sent another man"], answer:2, why:"ジミーは指名手配中の旧友を自分の手で逮捕できず、私服の刑事を送りました。手紙でその気持ちを伝えています。"}],
+  paragraphs:[
+    ["The policeman on his beat was walking slowly along the street.","It was not very late, but a cold wind and a little rain were in the air.","Most shops were dark and closed.","In the doorway of a dark shop, a man was waiting.","He had an appointment tonight.","It was an appointment from twenty years ago."],
+    ["The policeman stopped near the man.","\"I am all right, officer,\" the man said quickly.","\"I am waiting for a friend.\"","\"We made an appointment twenty years ago, here, in this place.\"","\"There was a restaurant here then, called Big Joe Brady's.\"","\"The city took it down five years ago.\""],
+    ["The man lit a match and put a cigar in his mouth.","In the light of the match, the policeman saw his face.","It was a strong face, with a small white scar near his eye.","His eyes were sharp and bright.","\"My friend's name is Jimmy Wells,\" the man said.","\"My name is Bob.\"","\"At seventeen, we were like brothers.\""],
+    ["\"Jimmy stayed in New York,\" Bob said.","\"I went west to make my money.\"","\"We wrote letters at first, but after some years, we stopped.\"","\"Still, I know Jimmy.\"","\"If he is alive, he will come tonight.\"","\"He was always true.\"","The policeman looked at his watch.","\"Three minutes to ten,\" he said.","\"I must go on. I hope your friend comes.\""],
+    ["Bob waited in the rain.","At first, the street was empty.","Then he saw a tall man coming to him.","The man wore a long coat, and his hat was low.","\"Bob!\" the man said.","\"Jimmy!\" Bob cried, and took his hand.","They began to walk together.","Under a bright shop light, Bob stopped suddenly.","\"You are not Jimmy Wells!\" he said."],
+    ["\"You are right,\" the tall man said quietly.","\"I am an undercover policeman.\"","\"Bob, you are under arrest.\"","The tall man gave him a small paper.","\"Read this first,\" he said.","\"It is a note from Jimmy.\""],
+    ["Bob's hands shook a little as he read.","The note was short.","\"Bob: I was at the place on time.\"","\"In the light of your match, I saw a wanted man's face.\"","\"That man was you, my old friend.\"","\"I cannot arrest my old friend myself.\"","\"So I sent another man to do it. — Jimmy.\"","Bob said nothing.","Twenty years had changed them both."]]
+},
+{ id:"prince", classic:true, cover:"👑", title:"The Happy Prince", titleJa:"幸福な王子", level:2, genre:"名作文学",
+  intro:"オスカー・ワイルドの童話を、原典（『The Happy Prince and Other Tales』1888年、Project Gutenberg、パブリックドメイン）から新たにやさしく書き直しました。金の像の王子と、一羽のツバメの物語です。",
+  grammar:{ title:"命令文（〜してください）", body:"動詞の原形で文を始めると「〜しなさい／〜してください」という命令文になります。王子の頼みは、ほとんどこの形です。\"Take the ruby and give it to her\"（ルビーを取って、彼女にあげてください）。やわらかく言うときは文頭や文末に please をつけます。物語の中で誰かの頼みや指示を読むとき、この形に気づくと場面がはっきり見えてきます。",
+    example:"Take the ruby and give it to her.",
+    exercise:{ q:"次の文の（ ）に入る語は？ \"( ) this letter to the woman, please.\"", choices:["Takes","Take","Took"], answer:1, why:"「手紙を渡してください」という頼みは命令文なので、動詞の原形 Take で文を始めます。" } },
+  vocab:[
+    {w:"statue", m:"像", s:"High above the city stood the statue of the Happy Prince."},
+    {w:"swallow", m:"ツバメ", s:"A little swallow stopped under the statue."},
+    {w:"ruby", m:"ルビー", s:"A great red ruby was in his sword."},
+    {w:"sapphire", m:"サファイア", s:"His eyes were two bright sapphires."},
+    {w:"golden", m:"金色の・金の", s:"His body was covered with thin leaves of golden colour."},
+    {w:"seamstress", m:"お針子・縫う仕事の女性", s:"A poor seamstress is working there."},
+    {w:"sick", m:"病気の", s:"Her little boy is sick in bed, and he is asking for oranges."},
+    {w:"matchgirl", m:"マッチ売りの少女", s:"He took the other sapphire to a little matchgirl in the street."},
+    {w:"angel", m:"天使", s:"God said to one of his angels, \"Bring me the two most precious things in the city.\""},
+    {w:"precious", m:"尊い・貴重な", s:"God said to one of his angels, \"Bring me the two most precious things in the city.\""}],
+  phrases:[
+    {en:"I never saw sorrow.", ja:"私には悲しみが見えませんでした。"},
+    {en:"Please stay with me one more night.", ja:"お願いです、あと一晩だけ一緒にいてください。"},
+    {en:"Bring me the two most precious things in the city.", ja:"この町で一番尊いものを二つ、持ってきなさい。"}],
+  quiz:[
+    {q:"Why was the Prince sad on his high column?", choices:["He was cold","From the top, he could see all the poor and sad people in the city","He wanted to fly to Egypt"], answer:1, why:"高い場所からは、町の貧しさや悲しみがすべて見えたのです。生きていた頃には見えなかったものでした。"},
+    {q:"What did the swallow take to the seamstress?", choices:["The ruby from the Prince's sword","A golden leaf","An orange"], answer:0, why:"王子は剣のルビーを外させ、病気の子を持つお針子に届けさせました。"},
+    {q:"What did the Prince give to the poor children at the end?", choices:["His sapphire eyes","His golden leaves, one by one","His sword"], answer:1, why:"両目（サファイア）を届けたあと、体の金の葉を一枚ずつ貧しい人々に届けました。"},
+    {q:"What were the two most precious things in the city?", choices:["The ruby and the sapphire","The statue and the mayor's house","The Prince's leaden heart and the dead swallow"], answer:2, why:"天使は、壊れた鉛の心臓と、死んだツバメを持ってきました。神はそれを正しく選んだと言いました。"}],
+  paragraphs:[
+    ["High above the city stood the statue of the Happy Prince.","His body was covered with thin leaves of golden colour.","His eyes were two bright sapphires.","A great red ruby was in his sword.","Everyone in the city loved the beautiful statue."],
+    ["One night, a little swallow stopped under the statue.","His friends had gone to Egypt six weeks before.","He was flying to Egypt too, but he wanted to sleep.","Suddenly, large drops of water fell on him.","\"How strange,\" he said. \"There is no cloud in the sky.\"","Then he looked up, and he saw the Prince's tears."],
+    ["\"When I was alive, I lived in a great house,\" said the Prince.","\"I played all day, and I never saw sorrow.\"","\"People called me the Happy Prince.\"","\"Now I stand high above the city, and I can see everything.\"","\"I can see the poor people, and their sad lives.\"","\"Swallow, little swallow, please help me.\""],
+    ["\"Far away, there is a small house,\" the Prince said.","\"A poor seamstress is working there.\"","\"Her little boy is sick in bed, and he is asking for oranges.\"","\"She has no money.\"","\"Take the ruby and give it to her.\"","The swallow took the ruby, flew to the house, and put it on the table.","The sick boy slept more quietly after that."],
+    ["On the next nights, the Prince asked for more help.","\"Please stay with me one more night.\"","He said it again and again.","The swallow took one sapphire eye to a young writer in a cold room.","He took the other sapphire to a little matchgirl in the street.","\"My matches are wet, and my father will beat me,\" she was crying.","After the sapphire, she ran home, laughing.","Now the Prince could not see, but his heart could feel."],
+    ["Then winter came, cold and white.","\"Take the golden leaves from my body, one by one,\" said the Prince.","\"Give them to the poor children of the city.\"","The swallow worked day after day.","He became weaker and weaker in the snow.","At last, he kissed the Prince on the lips and fell dead at his feet.","At that moment, the Prince's leaden heart broke in two."],
+    ["In the morning, the mayor saw the statue.","\"It is not beautiful now,\" he said. \"Take it down.\"","The men took down the statue and burned it in a fire.","But the broken heart did not burn.","They threw it away with the dead swallow.","Then God said to one of his angels, \"Bring me the two most precious things in the city.\"","The angel brought the leaden heart and the dead bird.","\"You have chosen well,\" said God."]]
+}
+);
+</script>
+
+<script>
+STORIES.push(
+{ id:"magi", classic:true, cover:"🎁", title:"The Gift of the Magi", titleJa:"賢者の贈り物", level:3, genre:"名作文学",
+  intro:"O・ヘンリーの代表作を、原典（『The Four Million』1906年、Project Gutenberg、パブリックドメイン）から新たに書き直しました。クリスマス前日、貧しい若い夫婦が互いに贈り物を買おうとする物語です。",
+  grammar:{ title:"although（〜だけれども）", body:"although は2つの文を「〜だけれども、…」とつなぐ接続詞です。本文の \"Although they were poor, their love was rich\"（貧しかったけれども、愛は豊かだった）のように、反対のことを1文で伝えられます。but と違って文頭にも置け、その場合は途中にコンマが入ります。気持ちの「ねじれ」を表す、物語に欠かせない表現です。",
+    example:"Although they were poor, their love was rich.",
+    exercise:{ q:"次の文の（ ）に入る語は？ \"( ) it was raining, we went out.\"", choices:["Although","Because","So"], answer:0, why:"「雨が降っていたけれども出かけた」という逆の内容をつなぐので、Although が入ります。" } },
+  vocab:[
+    {w:"counted", m:"数えた（count の過去形）", s:"Della counted the money three times, but it was still the same."},
+    {w:"cent", m:"セント（米国の硬貨の単位）", s:"One dollar and eighty-seven cents."},
+    {w:"treasure", m:"宝物・大切なもの", s:"Della and Jim had two treasures."},
+    {w:"proudly", m:"誇らしげに", s:"Jim took out his watch proudly on Sunday."},
+    {w:"comb", m:"くし", s:"Inside was a set of beautiful combs, the combs she had wanted for a long time."},
+    {w:"chain", m:"（時計の）鎖・チェーン", s:"It was a platinum chain for a watch, strong and simple."},
+    {w:"sell", m:"売る", s:"She decided to sell her hair."},
+    {w:"foolish", m:"愚かな", s:"They looked foolish, but they were wise."},
+    {w:"wise", m:"賢い", s:"They looked foolish, but they were wise."},
+    {w:"present", m:"贈り物", s:"She had to buy a present for Jim, her husband."}],
+  phrases:[
+    {en:"She had to buy a present for Jim, her husband.", ja:"彼女は夫のジムへの贈り物を買わなければなりませんでした。"},
+    {en:"It is just right for the watch.", ja:"その時計にぴったりです。"},
+    {en:"They looked foolish, but they were wise.", ja:"二人は愚かに見えましたが、賢かったのです。"}],
+  quiz:[
+    {q:"How much money did Della have at first?", choices:["Twenty dollars","One dollar and eighty-seven cents","Eight dollars"], answer:1, why:"デラが数えたお金は、1ドル87セントだけでした。"},
+    {q:"What did Della sell to buy Jim's present?", choices:["Her watch","Her long, beautiful hair","Her combs"], answer:1, why:"デラは自分の宝物である長い髪を売って、20ドルを得ました。"},
+    {q:"What did Della buy for Jim?", choices:["A gold chain for his watch","A new watch","A set of combs"], answer:0, why:"ジムの宝物の時計に合う、プラチナの鎖を買いました。"},
+    {q:"What did Jim sell to buy Della's combs?", choices:["His coat","His hair","His watch"], answer:2, why:"ジムは宝物の時計を売って、デラの髪のためのくしを買っていました。二人の贈り物はすれ違ったけれど、愛は届きました。"}],
+  paragraphs:[
+    ["One dollar and eighty-seven cents.","That was all.","Della counted the money three times, but it was still the same.","Sixty cents of it were pennies, saved one by one.","Tomorrow was Christmas Day.","She had to buy a present for Jim, her husband.","But she had only one dollar and eighty-seven cents."],
+    ["Della and Jim lived in a small flat.","It cost eight dollars a week.","Jim's work gave the family twenty dollars a week.","Times were not easy, and money was always short.","Still, the small flat was full of love.","Although they were poor, their love was rich."],
+    ["Della and Jim had two treasures.","One was Jim's gold watch.","It had belonged to his father and his grandfather.","Jim took out his watch proudly on Sunday.","The other treasure was Della's hair.","Her long hair fell below her knees like a brown waterfall.","When she let it down, it covered her like a soft coat."],
+    ["Della looked at her hair in the mirror.","Tears came to her eyes, but her face soon became strong.","She put on her old coat and her old hat.","She decided to sell her hair.","She ran down the street to a shop with a sign: Madame Sofronie. Hair Goods.","\"Will you buy my hair?\" Della asked.","\"Take your hat off,\" Madame said. \"Let me look.\"","\"Twenty dollars,\" she said at last."],
+    ["With the money in her hand, Della ran from shop to shop.","She was looking for Jim's present.","At last, she found it.","It was a platinum chain for a watch, strong and simple.","She thought, \"It is just right for the watch.\"","She paid twenty-one dollars for it.","She went home with eighty-seven cents.","Her hair was short now, in small curls around her face.","\"Jim will not kill me,\" she said to the mirror. \"But what will he say?\""],
+    ["At seven o'clock, Jim came home.","He closed the door and stood very still.","His eyes were fixed on Della, and she could not read his face.","\"Jim, dear,\" she cried, \"do not look at me like that.\"","\"I sold my hair to buy a present for you.\"","\"You cut your hair?\" Jim asked slowly.","\"It will grow again,\" Della said. \"But look — I have a present for you.\"","She held out the beautiful chain in her hand."],
+    ["Jim sat down and put his hands behind his head.","\"Dell,\" he said, \"let us put our presents away for a while.\"","\"They are too nice to use now.\"","\"I sold the watch to buy your combs.\"","He gave her a package.","Inside was a set of beautiful combs, the combs she had wanted for a long time.","They were for hair that was no longer there.","Della held the combs to her heart and laughed through her tears.","The Magi were wise men who gave gifts to a child long ago.","They began the art of giving Christmas presents.","Della and Jim gave up their greatest treasures for each other.","They looked foolish, but they were wise.","Of all who give and receive gifts, they were the wisest."]
+]
+},
+{ id:"lastleaf", classic:true, cover:"🍂", title:"The Last Leaf", titleJa:"最後の一葉", level:3, genre:"名作文学",
+  intro:"O・ヘンリーの感動作を、原典（『The Four Million』1906年、Project Gutenberg、パブリックドメイン）から新たに書き直しました。病気の若い画家ジョンジーと、窓の外のツタの葉の物語です。",
+  grammar:{ title:"if の文（もし〜なら）", body:"if を使うと「もし〜なら、…」という条件と結果を表せます。本文でジョンジーが言う \"If the last leaf falls, I will go too\"（最後の葉が落ちたら、私も行ってしまう）がその形です。if の部分は現在形、結果の部分は will を使うのが基本の型です。気持ちや未来の心配を表すときによく使われます。",
+    example:"If the last leaf falls, I will go too.",
+    exercise:{ q:"次の文の（ ）に入る語句は？ \"If it rains tomorrow, I ( ) at home.\"", choices:["stay","will stay","stayed"], answer:1, why:"「明日雨なら家にいる」という未来の結果なので、will stay が入ります。if の部分は現在形（rains）です。" } },
+  vocab:[
+    {w:"pneumonia", m:"肺炎", s:"In November, many people became sick with pneumonia."},
+    {w:"artist", m:"芸術家・画家", s:"Two young artists, Sue and Johnsy, lived in a small room at the top of a house."},
+    {w:"leaf", m:"葉（複数形は leaves）", s:"She was counting the leaves on an old ivy plant outside."},
+    {w:"counting", m:"数えている（count の -ing 形）", s:"She was counting the leaves on an old ivy plant outside."},
+    {w:"weak", m:"弱い・弱った", s:"Her body was weak, and her heart was weaker."},
+    {w:"masterpiece", m:"傑作・最高の作品", s:"For twenty-five years, he had talked about his masterpiece."},
+    {w:"paint", m:"描く・ペンキを塗る", s:"One day, I will paint my masterpiece."},
+    {w:"ladder", m:"はしご", s:"On the ground, there were a ladder and a lantern, still lighted."},
+    {w:"lantern", m:"ランタン・ともし火", s:"On the ground, there were a ladder and a lantern, still lighted."},
+    {w:"recover", m:"回復する", s:"Now she can recover."}],
+  phrases:[
+    {en:"If the last leaf falls, I will go too.", ja:"最後の葉が落ちたら、私も行ってしまうわ。"},
+    {en:"One day, I will paint my masterpiece.", ja:"いつか、私の傑作を描くんだ。"},
+    {en:"Now she can recover.", ja:"これで彼女は回復できます。"}],
+  quiz:[
+    {q:"What was Johnsy counting?", choices:["Stars in the sky","The leaves on an ivy plant outside the window","Pictures in the room"], answer:1, why:"ジョンジーは窓の外のツタの葉を、減っていく順に数えていました。"},
+    {q:"What did Johnsy believe about the last leaf?", choices:["If it fell, she would die too","If it fell, spring would come","If it stayed, she would travel"], answer:0, why:"「最後の葉が落ちたら私も死ぬ」と思い込んでいました。"},
+    {q:"Why did the last leaf never fall?", choices:["The winter was warm","It was not a real leaf — Behrman had painted it on the wall","Sue tied it to the plant"], answer:1, why:"嵐の夜、ベールマンが壁に描いた絵の葉でした。だから落ちなかったのです。"},
+    {q:"What happened to old Behrman?", choices:["He sold his masterpiece","He moved to a warm town","He caught pneumonia that night and died two days later"], answer:2, why:"嵐の中で葉を描いたベールマンは肺炎になり、2日後に亡くなりました。その絵こそ彼の傑作でした。"}],
+  paragraphs:[
+    ["In a part of New York called Greenwich Village, many artists had small rooms.","Two young artists, Sue and Johnsy, lived in a small room at the top of a house.","Johnsy's real name was Joanna.","In November, many people became sick with pneumonia.","Johnsy became sick too.","She lay in bed all day, weak and quiet, and looked out of the window."],
+    ["The doctor came every day.","\"She has one chance in ten,\" he told Sue.","\"And that chance is for her to want to live.\"","\"Her body was weak, and her heart was weaker.\"","Sue sat by the bed and tried to paint a happy picture.","But Johnsy only looked out of the window.","She was counting something, backwards."],
+    ["\"Twelve,\" Johnsy said quietly.","Then, \"Eleven.\" Then, \"Ten.\" Then, \"Nine.\"","Sue looked out of the window.","She was counting the leaves on an old ivy plant outside.","The cold wind had taken almost all of them.","\"When the last leaf falls, I must go too,\" Johnsy said.","\"If the last leaf falls, I will go too.\"","\"I have known that for three days.\""],
+    ["Sue went down to see old Behrman.","He was a painter of more than sixty years.","He had a long white beard and a red face.","For twenty-five years, he had talked about his masterpiece.","He always said, \"One day, I will paint my masterpiece.\"","But he had never begun it.","Sue told him about Johnsy and the leaves.","Behrman shouted at first, but his eyes were wet.","\"I will come and sit with you,\" he said."],
+    ["That night, a great storm came.","The wind beat hard against the windows.","The rain fell all night long.","Sue was afraid to open the curtain in the morning.","\"I do not want to look,\" Johnsy said. \"The leaf is gone.\"","\"Open it, Sue,\" she whispered.","Sue opened the curtain.","Against the wall, one leaf was still there.","It was green near the stem and yellow at the edges.","It had stayed through the storm."],
+    ["The leaf stayed all that day, and the next day too.","On the second evening, Johnsy spoke quietly.","\"Sue, I have been bad,\" she said.","\"I wanted to die because a leaf fell.\"","\"That was wrong.\"","\"Bring me some soup. I want to live.\"","\"One day, I hope to paint a beautiful picture.\"","The doctor smiled that evening.","The doctor said, \"Now she can recover.\""],
+    ["But the next day, Sue had sad news.","\"Johnsy, dear,\" she said. \"Mr. Behrman died today.\"","\"He had pneumonia, for only two days.\"","\"They found him in his room this morning, wet and cold.\"","\"His shoes and clothes were all wet.\"","\"On the ground, there were a ladder and a lantern, still lighted.\"","\"And there were brushes and green and yellow paint.\"","\"Look out of the window, dear.\"","\"Look at the last leaf on the wall.\"","\"Did you never wonder why it did not move in the wind?\"","\"Ah, darling, it is Behrman's masterpiece.\"","\"He painted it there, on the night the last real leaf fell.\""]]
+},
+{ id:"holmes", classic:true, cover:"🔍", title:"The Red-Headed League", titleJa:"赤毛組合", level:4, genre:"名作文学",
+  intro:"コナン・ドイルのシャーロック・ホームズ短編を、原典（『The Adventures of Sherlock Holmes』1892年、Project Gutenberg、パブリックドメイン）から新たに短く書き直しました。赤毛の男に持ちかけられた不思議な仕事の謎を解きます。",
+  grammar:{ title:"推量の助動詞 must be / cannot be", body:"must be 〜 は「〜にちがいない」という強い推量、cannot be 〜 は「〜であるはずがない」という強い否定の推量です。ホームズの推理は、この2つの行き来で進みます。本文の \"It must be a trick\"（策略にちがいない）のように、事実を並べてから推量で締めると、論理がはっきりします。ニュースの分析記事でも使われる表現です。",
+    example:"It must be a trick.",
+    exercise:{ q:"次の文の（ ）に入る語句は？ \"He has worked all night. He ( ) tired.\"", choices:["must be","cannot be","is never"], answer:0, why:"「一晩中働いたのだから、疲れているにちがいない」という強い推量なので、must be が入ります。" } },
+  vocab:[
+    {w:"league", m:"組合・同盟", s:"\"It is called the Red-Headed League,\" he said."},
+    {w:"pawnbroker", m:"質屋の主人", s:"Mr. Wilson was a pawnbroker with bright red hair."},
+    {w:"assistant", m:"助手・店員", s:"His assistant, Vincent Spaulding, worked for only half the usual pay."},
+    {w:"advertisement", m:"広告", s:"My assistant showed me a strange advertisement."},
+    {w:"encyclopedia", m:"百科事典", s:"He copied pages from a great encyclopedia, in clear handwriting."},
+    {w:"dissolved", m:"解散した", s:"\"The Red-Headed League is dissolved, October 9.\""},
+    {w:"knees", m:"（ズボンの）ひざ", s:"The knees of his trousers were dirty, worn, and shiny."},
+    {w:"tunnel", m:"トンネル・地下道", s:"They are digging a tunnel from your shop to the bank."},
+    {w:"cellar", m:"地下室", s:"At ten o'clock, Holmes, Watson, a police officer, and the bank director waited in the dark cellar of the bank."},
+    {w:"capture", m:"捕らえる・捕獲する", s:"Holmes planned to capture the famous thief John Clay that night."}],
+  phrases:[
+    {en:"It must be a trick.", ja:"それは策略にちがいありません。"},
+    {en:"Please tell me everything.", ja:"すべて話してください。"},
+    {en:"They are digging a tunnel from your shop to the bank.", ja:"彼らはあなたの店から銀行へトンネルを掘っているのです。"}],
+  quiz:[
+    {q:"What work did the Red-Headed League give Mr. Wilson?", choices:["Guarding a bank","Copying an encyclopedia in an office","Selling newspapers"], answer:1, why:"赤毛組合の仕事は、事務所で百科事典を書き写すことでした。週4ポンドの高給でした。"},
+    {q:"What did Holmes notice about the assistant, Spaulding?", choices:["His red hair","The dirty, worn knees of his trousers","His loud voice"], answer:1, why:"ズボンのひざが汚れてすり減っているのを見て、ホームズは長時間ひざをついて掘っていたと推理しました。"},
+    {q:"Why was Wilson given the strange job?", choices:["To keep him away from his shop while a tunnel was dug","To teach him history","Because the League loved red hair"], answer:0, why:"ウィルソンを毎日店から遠ざけ、その間に店の地下室から銀行へトンネルを掘るためでした。"},
+    {q:"Where did Holmes and the others wait on Saturday night?", choices:["In Wilson's shop","In the League's office","In the dark cellar of the bank"], answer:2, why:"銀行の地下金庫室で待ち伏せし、トンネルから現れたジョン・クレイらを捕らえました。"}],
+  paragraphs:[
+    ["One day, Dr. Watson visited his friend Sherlock Holmes in Baker Street.","A visitor was already there.","He was a large man with bright red hair.","\"This is Mr. Jabez Wilson,\" Holmes said.","Holmes said, \"Please tell me everything.\"","Mr. Wilson was a pawnbroker with bright red hair.","His shop was in a busy part of London."],
+    ["\"Some weeks ago,\" Wilson began, \"my assistant showed me a strange advertisement.\"","His assistant, Vincent Spaulding, worked for only half the usual pay.","\"It is called the Red-Headed League,\" he said.","The advertisement said this: a man with red hair could get easy work.","The pay was four pounds a week — a lot of money for easy work.","Wilson went to the office and was chosen at once.","His hair was the right red colour."],
+    ["\"The work was simple,\" Wilson said.","Every day, from ten to two, he copied pages from a great encyclopedia, in clear handwriting.","He could not leave the office during those hours.","He did the work for eight weeks, and he was paid every week.","Then, this morning, he found a note on the office door.","\"The Red-Headed League is dissolved, October 9.\"","The office was empty.","There was no league, and no one to ask."],
+    ["Holmes listened with his eyes closed.","Then he asked about Spaulding, the assistant.","\"He is about thirty,\" Wilson said. \"Small, clean-shaven, and clever.\"","\"He likes taking photographs, and he often goes down into the cellar of my shop.\"","Holmes opened his eyes at once.","The league cannot be real, Watson thought. It must be a trick.","Holmes smiled. \"This is a three-pipe problem,\" he said.","\"Please do not speak to me for fifty minutes.\""],
+    ["That afternoon, Holmes and Watson walked to Wilson's shop.","Holmes studied the street carefully.","Next to the pawnbroker's shop stood a great bank.","Holmes knocked on Wilson's door, and Spaulding came out.","Holmes asked him a simple question about the street.","But Holmes was not looking at the man's face.","He was looking down.","The knees of his trousers were dirty, worn, and shiny.","\"Just as I thought,\" Holmes said as they walked away."],
+    ["\"Watson,\" Holmes said, \"we must act tonight. It is Saturday.\"","\"The bank has borrowed thirty thousand gold coins from France.\"","\"They are in the bank's cellar now.\"","He had told Wilson: \"They are digging a tunnel from your shop to the bank.\"","Tonight, the thieves would come through the tunnel to take the gold.","Holmes planned to capture the famous thief John Clay that night.","Clay was young, clever, and one of the most wanted men in England."],
+    ["At ten o'clock, Holmes, Watson, a police officer, and the bank director waited in the dark cellar of the bank.","They waited among great boxes for more than an hour.","Suddenly, a light shone through a crack in the floor.","A stone turned slowly, and a young man's face appeared.","It was John Clay.","A second man followed him from the tunnel.","Holmes jumped forward and caught Clay by the arm.","The other man ran back into the tunnel, but the police were waiting at Wilson's shop.","\"It is finished, Mr. Holmes,\" Clay said coolly.","\"You have won this time.\"","Later, Holmes explained everything to Watson.","\"The League was invented to keep Wilson away from his shop every day.\"","\"Spaulding was Clay himself.\"","\"The dirty knees told me about the tunnel. The rest was easy.\""]]
+}
+);
+</script>
+
+<script>
 /* ================= 状態管理 ================= */
 const LS_KEY = "storyEnglish.v1";
 let ST = null;
@@ -772,7 +954,8 @@ function renderHome(){
   /* 本棚 */
   const shelves = $("#shelves"); shelves.innerHTML = "";
   const serial = STORIES.filter(s=>s.serial).sort((a,b)=>a.chapter-b.chapter);
-  const byLevel = lv => STORIES.filter(s=>s.level===lv && !s.serial);
+  const byLevel = lv => STORIES.filter(s=>s.level===lv && !s.serial && !s.classic);
+  const classics = STORIES.filter(s=>s.classic).sort((a,b)=>a.level-b.level);
   const mkShelf = (title, lvLabel, list) => {
     if(!list.length) return;
     const h = document.createElement("div");
@@ -782,13 +965,14 @@ function renderHome(){
       const locked = s.serial && s.chapter > 1 && !(ST.done[serial[s.chapter-2].id] || {}).done;
       const btn = document.createElement("button");
       btn.className = "story" + (locked ? " locked" : "");
-      btn.innerHTML = `<span class="cover">${s.cover}</span><span><span class="ttl">${s.serial ? `第${s.chapter}章 ` : ""}${s.title}</span><span class="meta" style="display:block">${s.titleJa}｜${s.genre}｜約${storyWords(s)}語</span><span class="intro" style="display:block">${locked ? "🔒 前の章を読み終えると開きます" : s.intro.slice(0, 42)}…</span></span><span class="badge ${d && d.done ? "done" : ""}">${d && d.done ? "✓ 読了" + (d.score!=null ? ` ${d.score}/${s.quiz.length}` : "") : locked ? "🔒" : "未読"}</span>`;
+      btn.innerHTML = `<span class="cover">${s.cover}</span><span><span class="ttl">${s.serial ? `第${s.chapter}章 ` : ""}${s.title}</span><span class="meta" style="display:block">${s.titleJa}｜${s.genre}${s.classic ? `｜Lv.${s.level}` : ""}｜約${storyWords(s)}語</span><span class="intro" style="display:block">${locked ? "🔒 前の章を読み終えると開きます" : s.intro.slice(0, 42)}…</span></span><span class="badge ${d && d.done ? "done" : ""}">${d && d.done ? "✓ 読了" + (d.score!=null ? ` ${d.score}/${s.quiz.length}` : "") : locked ? "🔒" : "未読"}</span>`;
       btn.onclick = ()=>{ if(locked){ toast("前の章を読み終えると開きます"); return; } openStory(s.id); };
       h.appendChild(btn);
     });
     shelves.appendChild(h);
   };
   mkShelf("連載ミステリー：灯台の光", "連載", serial);
+  mkShelf("名作コレクション：世界の短編", "名作", classics);
   for(let lv=1; lv<=4; lv++) mkShelf(["","やさしい読み物","読み応えのある読み物","高校入門の読み物","ニュースと読み物"][lv], "Lv."+lv, byLevel(lv));
 }
 /* ================= リーダー ================= */
@@ -1103,7 +1287,7 @@ function openSettings(){
     <div class="switchrow"><span>ダークモード<span class="desc">夜の読書に目にやさしく</span></span><button class="switch ${st.dark?"on":""}" id="swDark"></button></div>
     <button class="modebtn" id="setReset" style="display:block;width:100%;text-align:left;background:#f8d7d2;border-radius:14px;padding:13px 15px;font-weight:900;margin-top:10px">🗑️ 学習記録をすべてリセット</button>
     <button class="ghost-btn" onclick="closeSheet()">閉じる</button>
-    <p class="notice">記録はこの端末のブラウザ内にだけ保存されます。使用した物語はすべて書き下ろしオリジナルで、著作権フリーです。</p>`);
+    <p class="notice">記録はこの端末のブラウザ内にだけ保存されます。オリジナル物語は書き下ろし、名作コレクションはパブリックドメインの原典から新たに書き直したもので、出典は各話のあらすじに明記しています。</p>`);
   $$("#fsSeg button").forEach(b=>{ b.classList.toggle("on", b.dataset.fs === st.fs); b.onclick = ()=>{ st.fs = b.dataset.fs; saveST(); $$("#fsSeg button").forEach(x=>x.classList.toggle("on", x===b)); toast("文字サイズを変更しました（物語を開いたときに反映）"); }; });
   $$("#rateSeg button").forEach(b=>{ b.classList.toggle("on", +b.dataset.rate === st.rate); b.onclick = ()=>{ st.rate = +b.dataset.rate; saveST(); $$("#rateSeg button").forEach(x=>x.classList.toggle("on", x===b)); }; });
   $("#swDark").onclick = e=>{ st.dark = !st.dark; e.target.classList.toggle("on", st.dark); document.body.classList.toggle("dark", st.dark); saveST(); };
