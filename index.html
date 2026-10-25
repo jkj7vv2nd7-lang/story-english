@@ -1,0 +1,1129 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#1d4e3e">
+<title>ストーリーEnglish｜読むほど育つ英語の森</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='88'>📖</text></svg>">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --bg:#f6f1e7;--bg2:#efe7d7;--card:#fffdf8;--ink:#2c2a26;--sub:#7a7263;
+  --accent:#1d7a5f;--accent2:#14532d;--gold:#c9a227;--line:#e2d9c6;
+  --good:#1d7a5f;--bad:#c0392b;--chip:#eaf3ee;
+}
+body.dark{--bg:#171a17;--bg2:#101210;--card:#22261f;--ink:#e8e4da;--sub:#a49a86;--line:#3a4034;--chip:#2b332a}
+html,body{min-height:100%}
+body{
+  font-family:"Hiragino Sans","Yu Gothic UI","Noto Sans JP",sans-serif;color:var(--ink);
+  background:linear-gradient(180deg,var(--bg),var(--bg2));min-height:100dvh;
+}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+input,select{font-family:inherit}
+.view{display:none;max-width:680px;margin:0 auto;padding:16px 16px 48px;min-height:100dvh;flex-direction:column}
+.view.active{display:flex}
+.topbar{display:flex;align-items:center;gap:8px;margin-bottom:10px}
+.logo{font-size:21px;font-weight:900;letter-spacing:.01em}
+.logo .en{color:var(--accent)}
+.chip{background:var(--chip);border-radius:999px;padding:6px 12px;font-weight:800;font-size:13px;display:inline-flex;align-items:center;gap:4px}
+.topbar .spacer{flex:1}
+.iconbtn{background:var(--card);border:1.5px solid var(--line);border-radius:50%;width:42px;height:42px;font-size:19px;display:inline-flex;align-items:center;justify-content:center}
+.card{background:var(--card);border:1.5px solid var(--line);border-radius:18px;padding:16px;margin-bottom:12px;box-shadow:0 2px 8px rgba(60,50,20,.06)}
+.card h3{font-size:15px;margin-bottom:10px;color:var(--accent2)}
+body.dark .card h3{color:#8fd0b6}
+.roadmap{display:flex;align-items:flex-start;gap:0;margin:6px 0 2px}
+.rm-step{flex:1;text-align:center;position:relative;padding-top:22px;font-size:11.5px;font-weight:800;color:var(--sub);line-height:1.35}
+.rm-step::before{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);width:15px;height:15px;border-radius:50%;background:var(--card);border:3px solid var(--line);z-index:2}
+.rm-step::after{content:"";position:absolute;top:12.5px;left:calc(-50% + 9px);right:calc(50% + 9px);height:3.5px;background:var(--line)}
+.rm-step:first-child::after{display:none}
+.rm-step.done{color:var(--accent2)} body.dark .rm-step.done{color:#8fd0b6}
+.rm-step.done::before{background:var(--accent);border-color:var(--accent)}
+.rm-step.done::after{background:var(--accent)}
+.rm-step.now{color:var(--ink)}
+.rm-step.now::before{background:var(--gold);border-color:var(--gold);box-shadow:0 0 0 5px rgba(201,162,39,.25)}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.stat{background:var(--chip);border-radius:13px;padding:9px 4px;text-align:center}
+.stat b{display:block;font-size:19px}
+.stat span{font-size:11px;font-weight:700;color:var(--sub)}
+.review-cta{display:flex;align-items:center;gap:12px;width:100%;text-align:left;background:linear-gradient(120deg,#1d7a5f,#14532d);color:#fff;border-radius:16px;padding:15px 16px;font-weight:900;font-size:16px;box-shadow:0 4px 12px rgba(20,83,45,.3)}
+.review-cta .small{display:block;font-size:12px;font-weight:600;opacity:.85}
+.review-cta .arr{margin-left:auto;font-size:22px}
+.shelf-title{font-size:17px;font-weight:900;margin:16px 0 8px;display:flex;align-items:center;gap:8px}
+.shelf-title .lv{background:var(--accent);color:#fff;border-radius:8px;padding:2px 9px;font-size:12.5px}
+.story{display:flex;gap:12px;width:100%;text-align:left;background:var(--card);border:1.5px solid var(--line);border-radius:16px;padding:13px 14px;margin-bottom:9px;align-items:center;box-shadow:0 2px 6px rgba(60,50,20,.05)}
+.story:active{transform:scale(.99)}
+.story .cover{font-size:34px;width:52px;height:60px;flex:none;display:flex;align-items:center;justify-content:center;background:var(--chip);border-radius:10px}
+.story .ttl{font-weight:900;font-size:16.5px;line-height:1.35}
+.story .meta{font-size:12px;color:var(--sub);font-weight:700;margin-top:2px}
+.story .intro{font-size:12.5px;color:var(--sub);margin-top:3px;line-height:1.5}
+.story .badge{margin-left:auto;flex:none;font-size:12px;font-weight:900;color:var(--accent2)}
+.story .badge.done{color:var(--gold)}
+.story.locked{opacity:.55}
+.backbtn{align-self:flex-start;background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:8px 15px;font-weight:800;font-size:14px;margin-bottom:10px}
+.rtitle{font-size:24px;font-weight:900;line-height:1.4}
+.rmeta{color:var(--sub);font-weight:700;font-size:13px;margin:5px 0 12px}
+.reader-tools{display:flex;flex-wrap:wrap;gap:7px;margin-bottom:12px;position:sticky;top:0;background:var(--bg);padding:8px 0;z-index:5}
+.toolbtn{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:8px 13px;font-weight:800;font-size:13.5px}
+.toolbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+#storyBody{font-family:Georgia,"Times New Roman",serif;line-height:1.95}
+#storyBody.fs-s{font-size:16.5px}#storyBody.fs-m{font-size:18.5px}#storyBody.fs-l{font-size:21px}
+#storyBody p{margin-bottom:1.1em}
+#storyBody .sent{border-radius:5px;padding:1px 2px;cursor:pointer;transition:background .2s}
+#storyBody .sent:hover{background:rgba(201,162,39,.18)}
+#storyBody .sent.playing{background:rgba(29,122,95,.22);box-shadow:0 0 0 2px rgba(29,122,95,.25)}
+#storyBody .sent.sel{background:rgba(201,162,39,.3)}
+#storyBody .vw{border-bottom:2.5px dotted var(--gold);cursor:pointer;font-weight:600}
+.ja-note{background:var(--chip);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.7;margin-bottom:12px}
+.primary-btn{display:block;width:100%;margin-top:12px;background:linear-gradient(120deg,#1d7a5f,#14532d);color:#fff;font-size:16.5px;font-weight:900;border-radius:14px;padding:14px;box-shadow:0 4px 10px rgba(20,83,45,.25)}
+.ghost-btn{display:block;width:100%;margin-top:8px;background:var(--chip);color:var(--accent2);font-size:14.5px;font-weight:800;border-radius:14px;padding:12px}
+body.dark .ghost-btn{color:#8fd0b6}
+.modal-wrap{position:fixed;inset:0;background:rgba(20,25,18,.55);display:none;align-items:flex-end;justify-content:center;z-index:60}
+.modal-wrap.open{display:flex}
+.sheet{background:var(--card);color:var(--ink);width:100%;max-width:680px;border-radius:24px 24px 0 0;padding:20px 18px calc(18px + env(safe-area-inset-bottom));max-height:88dvh;overflow-y:auto;animation:sheetUp .26s ease}
+@keyframes sheetUp{from{transform:translateY(56px);opacity:.4}to{transform:translateY(0);opacity:1}}
+.sheet h2{font-size:20px;font-weight:900;margin-bottom:8px}
+.word-big{font-family:Georgia,serif;font-size:30px;font-weight:700}
+.word-mean{font-size:16.5px;font-weight:800;margin-top:6px;line-height:1.6}
+.word-ex{font-family:Georgia,serif;font-style:italic;color:var(--sub);margin-top:8px;line-height:1.6;font-size:15px}
+.quiz-q{font-weight:900;font-size:16.5px;line-height:1.6;margin-bottom:10px;font-family:Georgia,serif}
+.quiz-opt{display:block;width:100%;text-align:left;background:var(--chip);border-radius:12px;padding:12px 14px;margin-bottom:8px;font-weight:700;font-size:15.5px;font-family:Georgia,serif}
+.quiz-opt.right{background:#cdeeda;outline:2.5px solid var(--good)}
+.quiz-opt.wrong{background:#f8d7d2;outline:2.5px solid var(--bad)}
+.quiz-why{background:var(--chip);border-radius:12px;padding:11px 13px;font-size:13.5px;line-height:1.75;margin-top:6px;display:none}
+.phrase{background:var(--chip);border-radius:14px;padding:13px 14px;margin-bottom:10px}
+.phrase .en{font-family:Georgia,serif;font-size:18px;font-weight:700;line-height:1.5}
+.phrase .ja{font-size:13.5px;color:var(--sub);font-weight:700;margin-top:3px}
+.phrase .row{display:flex;gap:7px;margin-top:9px;flex-wrap:wrap}
+.pbtn{background:var(--card);border:1.5px solid var(--line);border-radius:999px;padding:7px 12px;font-weight:800;font-size:13px}
+.pbtn.rec{background:#c0392b;color:#fff;border-color:#c0392b}
+.pbtn.on{background:var(--accent);color:#fff;border-color:var(--accent)}
+.vcard{background:var(--card);border:2px solid var(--line);border-radius:20px;min-height:210px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:22px;text-align:center;cursor:pointer}
+.vcard .w{font-family:Georgia,serif;font-size:34px;font-weight:700}
+.vcard .m{font-size:19px;font-weight:900;margin-top:10px;line-height:1.6}
+.vcard .hint{color:var(--sub);font-weight:700;font-size:13px;margin-top:8px}
+.grade-row{display:flex;gap:9px;margin-top:12px}
+.grade{flex:1;border-radius:13px;padding:13px;font-weight:900;font-size:15.5px}
+.grade.ok{background:var(--accent);color:#fff}
+.grade.ng{background:#e07856;color:#fff}
+.switchrow{display:flex;align-items:center;gap:10px;padding:11px 2px;font-weight:800;font-size:15.5px}
+.switchrow .desc{display:block;font-size:12px;color:var(--sub);font-weight:600}
+.switch{margin-left:auto;width:56px;height:31px;border-radius:99px;background:#cfc8b4;position:relative;flex:none}
+.switch::after{content:"";position:absolute;top:3px;left:3px;width:25px;height:25px;border-radius:50%;background:#fff;transition:left .2s;box-shadow:0 2px 4px rgba(0,0,0,.25)}
+.switch.on{background:var(--accent)}.switch.on::after{left:28px}
+.seg{display:flex;gap:6px;margin-left:auto}
+.seg button{background:var(--chip);border-radius:9px;padding:7px 12px;font-weight:800}
+.seg button.on{background:var(--accent);color:#fff}
+.wpm-bar{display:flex;align-items:flex-end;gap:5px;height:74px;margin-top:8px}
+.wpm-bar .b{flex:1;background:var(--accent);border-radius:5px 5px 0 0;min-height:5px;position:relative}
+.wpm-bar .b span{position:absolute;top:-19px;left:50%;transform:translateX(-50%);font-size:10.5px;font-weight:800;color:var(--sub)}
+.notice{font-size:12.5px;color:var(--sub);font-weight:600;line-height:1.7;margin-top:10px}
+.toast{background:#22301f;color:#fff}
+.confetti{position:fixed;top:-4vh;font-size:21px;z-index:70;pointer-events:none;animation:confFall linear forwards}
+@keyframes confFall{to{transform:translateY(112vh) rotate(520deg)}}
+</style>
+</head>
+<body>
+
+<!-- ===== ホーム ===== -->
+<section class="view active" id="view-home">
+  <div class="topbar">
+    <div class="logo">🌲 ストーリー<span class="en">English</span></div>
+    <span class="spacer"></span>
+    <button class="chip" id="btnVocabTop">📚 単語帳 <span id="vocabCount">0</span></button>
+    <button class="iconbtn" id="btnSettings" aria-label="設定">⚙️</button>
+  </div>
+  <div class="card">
+    <h3>🗺️ Japan Times への道</h3>
+    <div class="roadmap" id="roadmap"></div>
+    <p class="notice" id="roadmapNote" style="margin-top:4px"></p>
+  </div>
+  <div class="card">
+    <h3>📈 あなたの記録</h3>
+    <div class="stats">
+      <div class="stat"><b id="stWords">0</b><span>総読語数</span></div>
+      <div class="stat"><b id="stDone">0</b><span>読了した話</span></div>
+      <div class="stat"><b id="stWpm">-</b><span>最新WPM</span></div>
+      <div class="stat"><b id="stStreak">0日</b><span>連続学習</span></div>
+    </div>
+    <div id="wpmGraph"></div>
+  </div>
+  <button class="review-cta" id="btnReviewCta">
+    <span>🔁 今日の復習<span class="small" id="reviewCtaSub">単語の復習はありません</span></span>
+    <span class="arr">→</span>
+  </button>
+  <div id="shelves"></div>
+  <p class="notice">物語はすべて書き下ろしのオリジナルです。単語の下線（点線）をタップすると意味が表示され、単語帳に登録できます。文をタップすると、その文から音声を再生できます。</p>
+</section>
+
+<!-- ===== リーダー ===== -->
+<section class="view" id="view-reader">
+  <button class="backbtn" id="btnReaderBack">← 本棚へ</button>
+  <div class="rtitle" id="rTitle"></div>
+  <div class="rmeta" id="rMeta"></div>
+  <div class="ja-note" id="rIntro"></div>
+  <div class="reader-tools">
+    <button class="toolbtn" id="btnPlayAll">▶ 全文を聞く</button>
+    <button class="toolbtn" id="btnRepeatSent">🔂 1文リピート OFF</button>
+    <span class="seg" id="speedSeg">
+      <button data-speed="0.75">0.75×</button><button data-speed="1" class="on">1.0×</button><button data-speed="1.25">1.25×</button>
+    </span>
+  </div>
+  <div id="storyBody" class="fs-m"></div>
+  <button class="primary-btn" id="btnFinish">✅ 読み終わった（理解クイズへ）</button>
+  <p class="notice">読み終わるまでの時間から、読解スピード（WPM：1分間に読めた語数）を記録します。音声を聞きながらの読了でも記録されます。</p>
+</section>
+
+<!-- ===== 理解クイズ ===== -->
+<section class="view" id="view-quiz">
+  <button class="backbtn" id="btnQuizBack">← 物語へ戻る</button>
+  <div class="rtitle" style="font-size:21px">📝 理解度クイズ</div>
+  <div class="rmeta" id="quizMeta"></div>
+  <div class="card" id="quizCard"></div>
+</section>
+
+<!-- ===== 文法・フレーズ ===== -->
+<section class="view" id="view-study">
+  <button class="backbtn" id="btnStudyBack">← 本棚へ</button>
+  <div class="rtitle" style="font-size:21px">🎓 文法と会話フレーズ</div>
+  <div class="rmeta" id="studyMeta"></div>
+  <div class="card" id="grammarCard"></div>
+  <div class="card"><h3>💬 会話フレーズ（音読・録音練習）</h3><div id="phraseList"></div>
+  <p class="notice">「お手本」を聞いてから「録音」で自分の声を録り、「聞き比べ」で確認できます。対応ブラウザでは「発音チェック」で音声認識による簡易判定もできます（目安としてご利用ください）。</p></div>
+</section>
+
+<!-- ===== 単語帳 ===== -->
+<section class="view" id="view-vocab">
+  <button class="backbtn" data-go="view-home">← ホームへ</button>
+  <div class="rtitle" style="font-size:21px">📚 単語帳</div>
+  <div class="rmeta" id="vocabMeta"></div>
+  <div id="vocabReview"></div>
+  <div class="card"><h3>登録済みの単語</h3><div id="vocabList"></div></div>
+</section>
+
+<div class="modal-wrap" id="modalWrap"><div class="sheet" id="modalSheet"></div></div>
+
+<script>
+"use strict";
+const $ = s => document.querySelector(s);
+const $$ = s => Array.from(document.querySelectorAll(s));
+const shuffle = a => { a=a.slice(); for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]];} return a; };
+const todayStr = () => { const d=new Date(); return d.getFullYear()+"-"+(d.getMonth()+1)+"-"+d.getDate(); };
+const INTERVALS = [0, 4*3600e3, 12*3600e3, 24*3600e3, 3*24*3600e3, 7*24*3600e3];
+function toast(msg){
+  let el = $("#toastEl");
+  if(!el){ el=document.createElement("div"); el.id="toastEl";
+    el.style.cssText="position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:#22301f;color:#fff;font-weight:800;font-size:14px;padding:11px 18px;border-radius:99px;z-index:99;box-shadow:0 6px 18px rgba(0,0,0,.3);max-width:88vw;text-align:center";
+    document.body.appendChild(el); }
+  el.textContent = msg; el.style.display="block";
+  clearTimeout(el._t); el._t = setTimeout(()=>{ el.style.display="none"; }, 2600);
+}
+function confetti(n){
+  const ems=["🎉","⭐","🍃","🌿","✨"];
+  for(let i=0;i<(n||14);i++){ const s=document.createElement("span"); s.className="confetti"; s.textContent=ems[i%ems.length];
+    s.style.left=Math.random()*96+"vw"; s.style.animationDuration=(1.6+Math.random()*1.4)+"s"; s.style.animationDelay=(Math.random()*.4)+"s";
+    document.body.appendChild(s); setTimeout(()=>s.remove(),4000); }
+}
+function showView(id){ $$(".view").forEach(v=>v.classList.remove("active")); $("#"+id).classList.add("active"); window.scrollTo(0,0); }
+function openSheet(html){ $("#modalSheet").innerHTML = html; $("#modalWrap").classList.add("open"); }
+function closeSheet(){ $("#modalWrap").classList.remove("open"); }
+$("#modalWrap").addEventListener("click", e=>{ if(e.target.id==="modalWrap") closeSheet(); });
+</script>
+
+<script>
+/* ================= 物語データ（全て書き下ろしオリジナル） ================= */
+const STORIES = [
+{ id:"lh1", serial:"lighthouse", chapter:1, cover:"🔦", title:"The Trip Back", titleJa:"帰郷", level:1, genre:"連載ミステリー",
+  intro:"定年退職した森健二（62歳）は、子どもの頃に夏を過ごした海辺の町「光町」を40年ぶりに訪れます。閉鎖されたはずの灯台に、今も光が灯るという噂を確かめるために。",
+  grammar:{ title:"一般動詞の過去形", body:"過去の出来事を表すとき、動詞は過去形になります。規則変化は語尾に -ed（worked, looked, visited）をつけ、不規則変化は went（go）、saw（see）、took（take）、got（get）のように形そのものが変わります。本文では現在の健二の様子（is, has）と、過去の回想（worked, went）が使い分けられています。時間を表す語（last spring, every summer）が過去形の合図になります。",
+    example:"He took a train to the sea.",
+    exercise:{ q:"次の文の（ ）に入る語は？ \"She ( ) home late last night.\"", choices:["comes","came","come"], answer:1, why:"last night（昨夜）があるので過去形が必要です。come の過去形は came という不規則変化です。" } },
+  vocab:[
+    {w:"retired", m:"定年退職した", s:"He retired from his school last spring."},
+    {w:"lighthouse", m:"灯台", s:"A young boy stood in front of a lighthouse."},
+    {w:"suddenly", m:"突然", s:"Then, suddenly, he saw a light."},
+    {w:"shine", m:"輝く・光る", s:"The light never shines."},
+    {w:"dark", m:"暗い", s:"He looked at the dark lighthouse."},
+    {w:"moment", m:"一瞬・瞬間", s:"It shone for a moment."},
+    {w:"smell", m:"においがする", s:"The air smelled of the sea."},
+    {w:"slowly", m:"ゆっくりと", s:"He said slowly."},
+    {w:"closed", m:"閉鎖された", s:"It closed twenty years ago."},
+    {w:"sold", m:"（sellの過去形）売った", s:"He sold drinks and maps in a small shop."}],
+  phrases:[
+    {en:"It's been a long time.", ja:"お久しぶりです。"},
+    {en:"Can I visit the lighthouse?", ja:"灯台を見学できますか？"},
+    {en:"I could not sleep.", ja:"眠れませんでした。"}],
+  quiz:[
+    {q:"What was Kenji's job?", choices:["A teacher","A doctor","A shop owner"], answer:0, why:"本文に \"He worked as a teacher for thirty-eight years\" とあります。38年間、教師でした。"},
+    {q:"How did Kenji go to Hikari Town?", choices:["By bus","By train","By ship"], answer:1, why:"\"He took a train to the sea\" とあるので電車（汽車）です。"},
+    {q:"Who is Mr. Sato?", choices:["Kenji's brother","Kenji's new teacher","Kenji's old friend"], answer:2, why:"\"Mr. Sato was Kenji's friend from those summer days\" とあります。夏の日の友人です。"},
+    {q:"What did Kenji see at night?", choices:["A ship","A light at the lighthouse","A woman on the hill"], answer:1, why:"最後の場面で、暗い灯台に一瞬だけ光が見えました。"}],
+  paragraphs:[
+    ["Kenji Mori is sixty-two years old.","He retired from his school last spring.","He worked as a teacher for thirty-eight years.","Now he has a lot of free time.","One morning, he found an old photo in a box.","In the photo, a young boy stood in front of a lighthouse.","The boy was Kenji."],
+    ["\"Hikari Town,\" Kenji said.","\"I went there every summer when I was a boy.\"","He looked at the photo for a long time.","Then he put some clothes in a bag.","He took a train to the sea."],
+    ["The trip took three hours.","Kenji looked out of the window.","He saw mountains, rivers, and small towns.","At last, the train stopped at Hikari Station.","Kenji got off with his bag.","The air smelled of the sea."],
+    ["An old man stood near the station.","He sold drinks and maps in a small shop.","He looked at Kenji and smiled.","\"Kenji? Is that you?\" he said.","\"Sato!\" Kenji said.","\"It's been a long time!\"","Mr. Sato was Kenji's friend from those summer days."],
+    ["Mr. Sato's shop was very small.", "It sold tea, bread, maps, and old postcards.", "On the wall, there were photos of the town from long ago.", "In one photo, children swam in the sea near the lighthouse.", "\"That was us,\" Mr. Sato said.", "\"You, me, and the summer sun.\"", "Kenji laughed, but his heart felt warm and a little sad."],
+    ["They drank tea in the small shop.","They talked about the old days.","Then Kenji asked about the lighthouse.","\"Can I visit the lighthouse?\" he asked.","Mr. Sato's smile went away.","\"No,\" he said slowly.","\"Nobody goes there now.\"","\"It closed twenty years ago.\"","\"The light never shines.\""],
+    ["That night, Kenji stayed at a small hotel near the sea.","He could not sleep.","He stood by the window and looked at the dark lighthouse.","Then, suddenly, he saw a light.","It shone for a moment, and then it was gone."]]
+},
+{ id:"lh2", serial:"lighthouse", chapter:2, cover:"🌙", title:"The Light in the Night", titleJa:"夜の光", level:2, genre:"連載ミステリー",
+  intro:"閉ざされた灯台に灯る光を、健二は自分の目で確かめようと夜通し窓辺に座ります。そして丘の上で、鍵を握る老婦人と出会います。",
+  grammar:{ title:"過去進行形（was / were 〜ing）", body:"過去のある瞬間に「ちょうど〜していた」という場面を表す形です。was / were のあとに動詞の -ing をつけます。本文の \"A cold wind was blowing from the sea\"（冷たい風が吹いていた）や \"Kenji's eyes were closing\"（目が閉じかけていた）がその例で、物語の場面を映画のように描く働きをします。単なる過去形（〜した）と組み合わせて使われます。",
+    example:"Kenji's eyes were closing.",
+    exercise:{ q:"次の文の（ ）に入る語句は？ \"At nine last night, I ( ) TV.\"", choices:["watch","was watching","watches"], answer:1, why:"「昨夜9時の時点で見ていた」という過去の場面なので、過去進行形 was watching が入ります。" } },
+  vocab:[
+    {w:"sure", m:"確信している", s:"But Kenji was sure."},
+    {w:"silent", m:"静かな・音のない", s:"At twelve, the town was silent."},
+    {w:"rust", m:"さび", s:"The gate was old and red with rust."},
+    {w:"sign", m:"看板・標識", s:"A sign said: NO ENTRY."},
+    {w:"lock", m:"錠・鍵", s:"On the door, there was a new lock."},
+    {w:"path", m:"小道", s:"An old woman stood on the path."},
+    {w:"carry", m:"運ぶ・持っていく", s:"She carried a heavy bag."},
+    {w:"heavy", m:"重い", s:"She carried a heavy bag."},
+    {w:"hill", m:"丘", s:"Kenji walked up the hill to the lighthouse."},
+    {w:"flat", m:"平らな", s:"The grass was flat in a small line."}],
+  phrases:[
+    {en:"I saw a light last night.", ja:"昨夜、光を見ました。"},
+    {en:"Nothing happened.", ja:"何も起こりませんでした。"},
+    {en:"I am sure.", ja:"確信しています。"}],
+  quiz:[
+    {q:"When did the light shine?", choices:["At nine o'clock","At eleven o'clock","After twelve o'clock"], answer:2, why:"11時には何も起きず、0時を過ぎてから光が3回灯りました。"},
+    {q:"What did Kenji find on the lighthouse door?", choices:["An old letter","A new lock","A photo"], answer:1, why:"\"there was a new lock. The lock was clean and silver\" とあります。新しい錠でした。"},
+    {q:"What did the sign say?", choices:["WELCOME","NO ENTRY","DANGER"], answer:1, why:"看板には NO ENTRY（立入禁止）と書かれていました。"},
+    {q:"Who stood behind Kenji on the hill?", choices:["Mr. Sato","A young girl","An old woman with a key"], answer:2, why:"手に鍵を持った老婦人が立っていました。"}],
+  paragraphs:[
+    ["The next morning, Kenji went to Mr. Sato's shop again.","\"Sato, I saw a light last night,\" he said.","\"A light? At the lighthouse?\"","Mr. Sato laughed, but his eyes were not laughing.","\"You were dreaming, Kenji.\"","\"The light never shines.\"","Kenji said nothing more."],
+    ["But Kenji was sure.","That night, he did not go to bed early.","He sat by the window with a cup of tea.","He watched the lighthouse.","The sea was black, and the sky was full of stars.","A cold wind was blowing from the sea."],
+    ["At eleven o'clock, nothing happened.","At twelve, the town was silent.","Kenji's eyes were closing.","Then — a light!","It shone three times, slowly.","One, two, three.","Then the night was dark again."],
+    ["Kenji did not sleep after the light.", "He made a small note in his notebook.", "\"October 12, about twelve thirty: light, three times.\"", "He read the note again and again.", "Someone was up there.", "Someone kept the lamp clean and ready.", "He wanted to know who, and why."],
+    ["The next day was October 12.","Kenji walked up the hill to the lighthouse.","The gate was old and red with rust.","A sign said: NO ENTRY.","The grass around the lighthouse was long.","Nobody came here, Kenji thought."],
+    ["But near the door, Kenji saw something.","The grass was flat in a small line.","Someone walked here not long ago.","And on the door, there was a new lock.","The lock was clean and silver.","It was not old at all."],
+    ["Kenji heard a sound behind him.","An old woman stood on the path.","She carried a heavy bag.","In her hand, there was a key.","She looked at Kenji, and her face went white."]]
+},
+{ id:"lh3", serial:"lighthouse", chapter:3, cover:"⛈️", title:"The Keeper's Daughter", titleJa:"灯台守の娘", level:2, genre:"連載ミステリー",
+  intro:"佐藤の口から語られる、1974年の嵐の夜の出来事。灯台守・青木と、助けられた漁船の船長との「約束」の物語が明らかになります。",
+  grammar:{ title:"受け身（be動詞＋過去分詞）", body:"「〜される／〜された」と、動作を受ける側を主語にする形です。be動詞（was / were など）のあとに過去分詞を置きます。本文の \"A fishing boat was lost in the dark\"（漁船が暗闇で遭難した）や \"The boat was saved by Aoki's light\"（船は青木の光に救われた）が例です。by 〜 で「〜によって」を付け足せます。ニュース英語でも頻繁に使われる重要表現です。",
+    example:"The boat was saved by Aoki's light.",
+    exercise:{ q:"次の文の（ ）に入る語句は？ \"This bridge ( ) in 1960.\"", choices:["built","was built","builds"], answer:1, why:"橋は「建てられる」側で、1960年という過去の話なので、受け身の過去形 was built が入ります。" } },
+  vocab:[
+    {w:"truth", m:"真実・本当のこと", s:"Tell me the truth."},
+    {w:"keeper", m:"管理人・番人", s:"Who was the keeper of the lighthouse?"},
+    {w:"storm", m:"嵐", s:"In 1974, there was a big storm."},
+    {w:"wave", m:"波", s:"The waves were like mountains."},
+    {w:"safely", m:"無事に・安全に", s:"The boat came back safely."},
+    {w:"promise", m:"約束する・約束", s:"The captain promised something."},
+    {w:"captain", m:"船長", s:"The captain said, \"Your light saved our lives.\""},
+    {w:"harbor", m:"港", s:"A tall ship stood in the harbor."},
+    {w:"notebook", m:"ノート", s:"Kenji wrote in his notebook."},
+    {w:"alone", m:"一人で・孤独に", s:"She lives alone in the old keeper's house."}],
+  phrases:[
+    {en:"Tell me the truth.", ja:"本当のことを教えてください。"},
+    {en:"Your light saved our lives.", ja:"あなたの光が私たちの命を救いました。"},
+    {en:"Maybe this year.", ja:"今年こそは、かもしれない。"}],
+  quiz:[
+    {q:"Who was Aoki?", choices:["A ship captain","The lighthouse keeper","A teacher"], answer:1, why:"青木は40年間灯台を守った灯台守でした。"},
+    {q:"What happened in 1974?", choices:["The lighthouse was built","A boat was saved during a storm","The town closed the station"], answer:1, why:"嵐の夜、青木が一晩中光を灯し続け、漁船が救われました。"},
+    {q:"What did the captain promise?", choices:["To send money","To build a new lighthouse","To come back and thank Aoki"], answer:2, why:"船長は「いつか戻ってお礼を言う」と約束しましたが、二度と来ませんでした。"},
+    {q:"Who is Yoko?", choices:["Aoki's daughter","Mr. Sato's wife","The captain's sister"], answer:0, why:"丘で会った老婦人は、青木の娘・洋子でした。"}],
+  paragraphs:[
+    ["The old woman did not speak.","She turned and walked away quickly.","Kenji watched her go down the hill.","He wanted to follow her, but he did not.","He went back to Mr. Sato's shop."],
+    ["\"Sato, tell me the truth,\" Kenji said.","\"Who was the keeper of the lighthouse?\"","Mr. Sato was quiet for a while.","Then he said, \"His name was Aoki.\"","\"He worked at the lighthouse for forty years.\"","\"He knew the sea better than anyone.\""],
+    ["\"In 1974, there was a big storm,\" Mr. Sato said.","\"A fishing boat was lost in the dark.\"","\"The waves were like mountains.\"","\"All night, Aoki kept the light on.\"","\"He turned the light again and again.\"","\"At morning, the boat came back safely.\"","\"The boat was saved by Aoki's light, everyone said.\""],
+    ["\"Aoki loved that lighthouse,\" Mr. Sato said.", "\"Every morning, he cleaned the glass.\"", "\"Every evening, he checked the lamp.\"", "\"In winter storms, he did not sleep.\"", "\"People in this town slept safely because of him.\"", "\"Children called him 'Uncle Light.'\""],
+    ["\"The captain promised something,\" Mr. Sato went on.","\"He said, 'One day, I will come back to thank you.'\"","\"But he never came.\"","\"Aoki waited for years.\"","\"Every year, on October 12, he lit the lamp.\"","\"He said, 'Maybe this year.'\""],
+    ["\"Aoki died ten years ago,\" Mr. Sato said.","\"The town closed the lighthouse.\"","\"And the woman on the hill?\" Kenji asked.","Mr. Sato looked out of the window.","\"That was Yoko,\" he said.","\"Aoki's daughter.\"","\"She lives alone in the old keeper's house.\""],
+    ["That evening, Kenji wrote in his notebook:","\"Who was the captain of the boat?\"","\"Why did he never come back?\"","He looked at the old photo again.","In the photo, behind the boy, a tall ship stood in the harbor.","Kenji's eyes stopped on the ship's name."]]
+}
+];
+</script>
+
+<script>
+STORIES.push(
+{ id:"lh4", serial:"lighthouse", chapter:4, cover:"✉️", title:"The Letter", titleJa:"手紙", level:3, genre:"連載ミステリー",
+  intro:"船長の名を求めて図書館の古い新聞をあたる健二。そこに見つけた名前は、彼自身の祖父のものでした。50年間、送られなかった手紙の物語です。",
+  grammar:{ title:"現在完了形（have / has＋過去分詞）", body:"「ずっと〜している（継続）」「〜したことがある（経験）」「〜してしまった（完了）」を表す形です。過去のある時点から「今」につながる感覚が特徴で、単なる過去形と区別されます。本文の \"Many people have asked about that storm\"（多くの人が尋ねてきた）や \"the letter has waited in this box\"（手紙はこの箱の中で待ち続けてきた）が例です。Japan Timesなどの報道でも頻出します。",
+    example:"For fifty years, the letter has waited in this box.",
+    exercise:{ q:"次の文の（ ）に入る語句は？ \"I ( ) this town three times.\"", choices:["visit","have visited","visits"], answer:1, why:"「3回訪れたことがある」という経験を表すので、現在完了形 have visited が入ります。" } },
+  vocab:[
+    {w:"article", m:"（新聞などの）記事", s:"He found a small article."},
+    {w:"hurt", m:"痛む", s:"His eyes hurt, but he did not stop."},
+    {w:"wooden", m:"木製の", s:"She gave him a small wooden box."},
+    {w:"compass", m:"羅針盤・コンパス", s:"There were a compass, some photos, and an old letter."},
+    {w:"shake", m:"振る・（手を）握る", s:"I will come and shake your hand."},
+    {w:"sick", m:"病気の", s:"Grandfather became sick that winter."},
+    {w:"became", m:"（becomeの過去形）〜になった", s:"Grandfather became sick that winter."},
+    {w:"rest", m:"残り・その他", s:"His sister told him the rest."},
+    {w:"desk", m:"受付・机", s:"An old woman at the desk smiled at him."},
+    {w:"inside", m:"内側に・中に", s:"Inside, there were a compass and photos."}],
+  phrases:[
+    {en:"I am looking for news from 1974.", ja:"1974年の記事を探しています。"},
+    {en:"Do you remember Grandfather's wooden box?", ja:"おじいさんの木箱を覚えていますか？"},
+    {en:"It was never sent.", ja:"それは決して送られませんでした。"}],
+  quiz:[
+    {q:"Where did Kenji find the captain's name?", choices:["In a book at the hotel","In an old newspaper","On the lighthouse door"], answer:1, why:"図書館の古い新聞の小さな記事に、船長の名前がありました。"},
+    {q:"Who was Captain Jiro Mori?", choices:["Kenji's grandfather","Mr. Sato's father","Aoki's brother"], answer:0, why:"船長・森次郎は健二の祖父でした。"},
+    {q:"What was in the wooden box?", choices:["Money and a map","A compass, photos, and a letter","Keys to the lighthouse"], answer:1, why:"箱には羅針盤と写真と、送られなかった手紙が入っていました。"},
+    {q:"Why was the letter never sent?", choices:["The grandfather lost it","The grandfather became sick and died","Aoki moved away"], answer:1, why:"祖父はその冬に病気になり、翌春に亡くなったため、手紙は送られませんでした。"}],
+  paragraphs:[
+    ["Kenji could not stop thinking about the captain.","The next morning, he went to the town library.","An old woman at the desk smiled at him.","\"I am looking for news from 1974,\" Kenji said.","\"A storm, a fishing boat, and the lighthouse.\"","\"Many people have asked about that storm,\" she said.","She brought him a box of old newspapers."],
+    ["Kenji read for three hours.","His eyes hurt, but he did not stop.","At last, he found a small article.","It said: \"Last night, the fishing boat Koyo-maru came back safely.\"","\"Captain Jiro Mori thanked the lighthouse keeper.\"","Kenji read the name again and again.","\"Jiro Mori.\"","\"My grandfather.\""],
+    ["Kenji sat at the library desk for a long time.", "The old newspaper was yellow and thin.", "His hands were shaking a little.", "All his life, his grandfather was a quiet, kind man.", "Now a new piece of the old man was in front of him.", "A brave captain. A man with a promise."],
+    ["Kenji's grandfather was a fisherman.","He died when Kenji was fourteen.","Kenji remembered his strong hands and his quiet smile.","He never talked about the storm.","That night, Kenji called his sister in the city.","\"Sister, do you remember Grandfather's wooden box?\""],
+    ["\"The box is in my house,\" she said.","\"Come and get it tomorrow.\"","The next day, Kenji took the first train.","His sister gave him a small wooden box.","It smelled of the sea.","Inside, there were a compass, some photos, and an old letter."],
+    ["The letter began: \"Dear Mr. Aoki.\"","\"Your light saved my life and the lives of my men.\"","\"I am writing to say thank you.\"","\"One day, I will come to Hikari Town and shake your hand.\"","The letter ended there.","It was never sent.","For fifty years, the letter has waited in this box."],
+    ["His sister told him the rest.","Grandfather became sick that winter.","He died the next spring, in 1975.","On the train back to Hikari Town, Kenji held the letter in his hand.","Outside, the sky was dark.","The radio said, \"A big storm is coming on October 12.\""]]
+},
+{ id:"lh5", serial:"lighthouse", chapter:5, cover:"🕯️", title:"The Storm Night", titleJa:"嵐の夜", level:3, genre:"連載ミステリー",
+  intro:"健二はついに洋子の家を訪ね、手紙のことを伝えます。そして50周年の10月12日、嵐の予報の中、二人は丘を登ります。",
+  grammar:{ title:"関係代名詞 who", body:"人について説明を付け足すとき、who を使って文をつなげます。「〜する人」「〜した人」という意味で、先行する名詞（人）の後ろに置きます。本文の \"a man who never broke a promise\"（約束を破らなかった男）が例です。関係代名詞を使うと2つの文を1つにまとめられ、文章がぐっと自然になります。ニュース英語でも人物紹介によく現れます。",
+    example:"My father was a man who never broke a promise.",
+    exercise:{ q:"次の文の（ ）に入る語は？ \"The woman ( ) lives near the hill is Yoko.\"", choices:["which","who","what"], answer:1, why:"先行詞が人（The woman）なので、関係代名詞は who を使います。" } },
+  vocab:[
+    {w:"hesitate", m:"ためらう", s:"She hesitated, then opened the door."},
+    {w:"climb", m:"登る", s:"Every October 12, I climb the hill."},
+    {w:"dangerous", m:"危険な", s:"The hill path is dangerous in a storm."},
+    {w:"anniversary", m:"記念日", s:"Tomorrow is the fiftieth anniversary."},
+    {w:"distance", m:"距離・遠く", s:"They watched the sea in the distance."},
+    {w:"below", m:"下に・下方に", s:"Below them, the town lights were small."},
+    {w:"whole", m:"全体の・全部の", s:"The whole town saw the light."},
+    {w:"tear", m:"涙", s:"Tears came to her eyes."},
+    {w:"place", m:"場所・（in his place で）代わり", s:"I lit the lamp in his place."},
+    {w:"forecast", m:"予報", s:"The forecast said a storm was coming."}],
+  phrases:[
+    {en:"I will go with you.", ja:"一緒に参ります。"},
+    {en:"For the first time in twenty years.", ja:"20年ぶりに。"},
+    {en:"He really wanted to come.", ja:"彼は本当に来たかったのです。"}],
+  quiz:[
+    {q:"What does Yoko do every October 12?", choices:["Visits the library","Lights the lighthouse lamp","Goes fishing"], answer:1, why:"父の代わりに、毎年10月12日に灯台のランプを灯してきました。"},
+    {q:"What does Kenji show Yoko?", choices:["A new compass","The letter and the photo","A train ticket"], answer:1, why:"健二は祖父の手紙と古い写真を洋子に見せました。"},
+    {q:"Why is this October 12 special?", choices:["It is Yoko's birthday","It is the fiftieth anniversary of the storm","The lighthouse will close"], answer:1, why:"1974年の嵐から50周年の年でした。"},
+    {q:"What happens at the end of the chapter?", choices:["The whole town sees the light","The storm breaks the lamp","Yoko leaves the town"], answer:0, why:"20年ぶりに、町中の人が灯台の光を見ました。"}],
+  paragraphs:[
+    ["On October 11, Kenji walked to the old keeper's house.","It stood at the foot of the hill, near the sea.","He knocked on the door and waited.","For a long time, nothing happened.","Then the door opened a little.","Yoko stood there.","She hesitated, then opened the door fully.","\"Please come in,\" she said."],
+    ["The house was small and very clean.", "On a shelf, there were ship pictures and a blue cup.", "A man's coat hung near the door.", "\"My father's coat,\" Yoko said.", "\"I cannot throw it away.\"", "The room smelled of tea and the sea."],
+    ["They drank tea in a small, quiet room.","On the wall, there was a photo of a young keeper.","\"My father was a man who never broke a promise,\" Yoko said.","\"So I made a promise too, after he died.\"","\"Every October 12, I climb the hill.\"","\"I clean the lamp, and I light it.\"","\"The town thinks the lighthouse is closed.\"","\"But the lamp still works.\""],
+    ["Kenji took the old letter from his bag.","\"My grandfather wrote this,\" he said.","\"He really wanted to come.\"","\"Please read it.\"","Yoko read the letter slowly.","Tears came to her eyes.","\"Fifty years,\" she said quietly.","\"My father waited, and the letter waited too.\""],
+    ["Outside the window, the wind was getting stronger.","\"The forecast says a storm is coming tomorrow night,\" Kenji said.","\"Tomorrow is the fiftieth anniversary.\"","Yoko looked at the photo of her father.","\"Tomorrow, I will light the lamp again,\" she said.","\"But the hill path is dangerous in a storm,\" Kenji said.","\"Then I will go with you,\" he said.","Yoko smiled for the first time."],
+    ["On the evening of October 12, the wind sang around the house.","Kenji and Yoko climbed the hill together.","The rain hit their coats, and the path was dark.","But they did not stop.","At the top, Kenji opened the heavy door.","Yoko climbed the stairs and lit the lamp.","The great light turned, slowly, over the sea."],
+    ["Below them, the town lights were small and warm.","People came out of their houses.","They pointed at the hill and talked.","Mr. Sato stood in front of his shop and watched.","And that night, for the first time in twenty years, the whole town saw the light."]]
+},
+{ id:"lh6", serial:"lighthouse", chapter:6, cover:"🎆", title:"The Light Goes On", titleJa:"灯り続ける光", level:4, genre:"連載ミステリー",
+  intro:"最終章。町は灯台を修復し、小さな博物館として再生させることを決めます。50年越しの約束がたどり着く先とは——。",
+  grammar:{ title:"関係代名詞 which / that と後置修飾", body:"物や事について説明を付け足すときは which や that を使います。本文の \"the letter that Jiro Mori wrote\"（次郎が書いた手紙）のように、名詞の後ろに説明を続ける「後置修飾」は英語の大きな特徴で、日本語の語順（手紙の前に説明が来る）と逆になります。長文読解では、この後ろ向きの修飾を素早く見抜くことが Japan Times 級の文章を読む鍵になります。",
+    example:"Visitors can see the letter that Jiro Mori wrote fifty years ago.",
+    exercise:{ q:"次の文の（ ）に入る語は？ \"The book ( ) I read yesterday was interesting.\"", choices:["who","that","what"], answer:1, why:"先行詞が物（The book）で、目的格の関係代名詞として that が入ります（which でも可）。" } },
+  vocab:[
+    {w:"spread", m:"広がる", s:"The news spread quickly through the town."},
+    {w:"mayor", m:"町長・市長", s:"The mayor visited Yoko's house."},
+    {w:"repair", m:"修理する", s:"The town decided to repair the lighthouse."},
+    {w:"museum", m:"博物館", s:"They made it a small museum."},
+    {w:"display", m:"展示する", s:"The photo was displayed near the entrance."},
+    {w:"festival", m:"祭り", s:"The town planned a small festival."},
+    {w:"officially", m:"公式に", s:"The lamp is now lit officially every year."},
+    {w:"event", m:"行事・イベント", s:"It became a town event."},
+    {w:"entrance", m:"入口", s:"The photo was displayed near the entrance."},
+    {w:"glass", m:"ガラス（製の）", s:"The letter was put in a glass case."}],
+  phrases:[
+    {en:"The news spread quickly.", ja:"その知らせはすぐに広まりました。"},
+    {en:"Some promises are kept late, but they are kept.", ja:"果たされるのが遅れる約束もある。けれど、果たされるのです。"},
+    {en:"The light goes on.", ja:"光は灯り続けます。"}],
+  quiz:[
+    {q:"What did the town decide to do?", choices:["Sell the lighthouse","Repair the lighthouse and make it a museum","Build a hotel on the hill"], answer:1, why:"町は灯台を修理し、小さな博物館として再生させることを決めました。"},
+    {q:"Where are the letter and the compass now?", choices:["In Kenji's house","In Yoko's house","In a glass case in the museum"], answer:2, why:"手紙と羅針盤は博物館のガラスケースに展示されています。"},
+    {q:"What is the \"Night of Light\"?", choices:["A fishing competition","A town event on October 12","A train service"], answer:1, why:"毎年10月12日にランプを灯す、町の行事になりました。"},
+    {q:"What does Kenji decide at the end?", choices:["To move to a big city","To become a teacher again","To spend his summers in Hikari Town"], answer:2, why:"健二は毎年夏を光町で過ごすことに決めました。"}],
+  paragraphs:[
+    ["The news spread quickly through the town.","\"The light shone again!\" people said.","\"After twenty years!\"","A week later, the mayor visited Yoko's house.","\"The lighthouse is part of our town's story,\" he said.","\"We want to repair it.\"","\"Will you help us, Mrs. Yoko?\"","Yoko's eyes were bright.","\"My father would be happy,\" she said."],
+    ["In spring, the work began.","Workers repaired the walls and the stairs.","They painted the lighthouse white.","Inside, they made a small museum.","In a glass case near the door, visitors can see the letter that Jiro Mori wrote fifty years ago.","The compass is next to it.","The old photo was displayed near the entrance.","In the photo, a young boy stands in front of the lighthouse.","Under it, the museum wrote: \"Kenji Mori, age ten.\""],
+    ["People came from other towns to see the lighthouse.", "A newspaper wrote a story about it.", "An old sailor read the story and sent a letter to the museum.", "\"I know that light,\" he wrote.", "\"It saved my boat too, in 1968.\"", "Yoko put his letter next to her father's photo."],
+    ["School children came to visit the museum.","Kenji told them the story of the storm.","\"A light can save lives,\" he said.","\"And a promise can travel across fifty years.\"","The children listened with wide eyes.","One girl asked, \"Were you scared in the storm, Mr. Kenji?\"","Kenji laughed.","\"A little,\" he said.","\"But the lamp was with us.\""],
+    ["The town planned a small festival on October 12.","They called it the Night of Light.","Fishing boats in the harbor turned on their lights.","Shops gave hot soup to visitors.","When the sky became dark, everyone looked at the hill.","Yoko and Kenji climbed the stairs together.","Yoko's hand touched the switch.","The great light went on."],
+    ["The light turned slowly over the sea and the town.","From the harbor, the boats answered with their horns.","People clapped and cheered.","Yoko looked at the sea for a long time.","\"Father,\" she said quietly, \"the light goes on.\"","Kenji stood beside her.","Some promises are kept late.","But they are kept."],
+    ["Kenji now spends every summer in Hikari Town.","He helps at the museum on weekends.","Sometimes, Mr. Sato brings tea, and the three old friends talk about the sea.","And every October 12, the light shines again over Hikari Town.","It shines for the ships.","It shines for the town.","And it shines for a promise, fifty years old."]]
+}
+);
+</script>
+
+<script>
+STORIES.push(
+{ id:"momo", cover:"🐱", title:"Momo the Station Cat", titleJa:"駅猫モモ", level:1, genre:"ほのぼの",
+  intro:"小さな駅に住む猫モモは、駅員さんと同じように毎日「出勤」します。ある雨の日、迷子の男の子とモモが出会います。",
+  grammar:{ title:"三人称単数の -s", body:"主語が「彼・彼女・それ」の一人・一匹・一つ（三人称単数）のとき、一般動詞に -s がつきます。本文の \"Momo lives at a small station\"（lives）、\"She waits for the train\"（waits）などです。日本語にはない感覚なので、「主語が he / she / it なら動詞に s」と意識して読むと身につきます。",
+    example:"Momo lives at a small station.",
+    exercise:{ q:"次の文の（ ）に入る語は？ \"He ( ) to school by bus.\"", choices:["go","goes","going"], answer:1, why:"主語が He（三人称単数）なので、go に es がついた goes が正解です。" } },
+  vocab:[
+    {w:"station", m:"駅", s:"Momo lives at a small station."},
+    {w:"wait", m:"待つ", s:"She waits for the train."},
+    {w:"passenger", m:"乗客", s:"The passengers know her name."},
+    {w:"bench", m:"ベンチ", s:"She sleeps on a warm bench."},
+    {w:"lost", m:"道に迷った・失くした", s:"A little boy was lost."},
+    {w:"cry", m:"泣く", s:"He stood near the gate and cried."},
+    {w:"beside", m:"〜のそばに", s:"Momo sat beside him."},
+    {w:"safe", m:"安全な・無事な", s:"He was safe now."},
+    {w:"everyone", m:"みんな", s:"Everyone smiles at her."},
+    {w:"job", m:"仕事", s:"It is her job."}],
+  phrases:[
+    {en:"She waits for the train.", ja:"彼女は電車を待ちます。"},
+    {en:"Are you lost?", ja:"迷子ですか？"},
+    {en:"He was safe now.", ja:"彼はもう大丈夫でした。"}],
+  quiz:[
+    {q:"Where does Momo live?", choices:["At a school","At a small station","In a garden"], answer:1, why:"モモは小さな駅に住んでいます。"},
+    {q:"What does Momo do in the morning?", choices:["She catches fish","She greets the passengers","She rides the train"], answer:1, why:"朝は改札の近くで乗客を迎えるのがモモの「仕事」です。"},
+    {q:"Why was the boy crying?", choices:["He was hungry","He was lost","He lost his cat"], answer:1, why:"男の子は駅で迷子になって泣いていました。"},
+    {q:"What did Momo do for the boy?", choices:["She sat beside him","She brought him food","She called the station man"], answer:0, why:"モモは男の子のそばに座り、お母さんが来るまで一緒にいました。"}],
+  paragraphs:[
+    ["Momo is a cat.","She lives at a small station in the country.","She is white and brown, and her ears are small.","The station man gives her food every morning.","Momo has a job at the station.","Her job is to say hello."],
+    ["Every morning, Momo sits near the gate.","The passengers come and go.","\"Good morning, Momo,\" they say.","Momo looks at them and says, \"Meow.\"","Everyone smiles at her.","At night, she sleeps on a warm bench."],
+    ["Momo knows the trains very well.", "When the morning train comes, she sits up.", "When the noon train comes, she eats lunch with the station man.", "When the evening train comes, she walks to the gate.", "She says goodbye to everyone.", "The station is small, but Momo's day is full."],
+    ["One rainy day, a little boy came to the station with his mother.","The mother bought tickets at the machine.","The boy looked at a big map on the wall.","Then he could not see his mother.","He was lost.","He stood near the gate and cried."],
+    ["Momo saw the boy.","She walked to him slowly.","She sat beside him and said, \"Meow.\"","The boy stopped crying.","He touched Momo's head.","Momo closed her eyes and purred."],
+    ["Soon, the mother came back.","\"There you are!\" she said.","She held the boy in her arms.","\"Thank you, Momo,\" she said.","Momo said, \"Meow,\" and went back to the gate.","The next train was coming.","It was time for her job."]]
+},
+{ id:"garden", cover:"🍅", title:"My Morning Garden", titleJa:"私の朝の畑", level:1, genre:"日常",
+  intro:"退職後の楽しみは、小さな畑。トマトとキュウリと、隣家の木村さんとの朝の会話。何気ない毎日を現在形で描く、やさしい一篇です。",
+  grammar:{ title:"現在形と頻度を表す副詞", body:"習慣や毎日の出来事には現在形を使います。always（いつも）、usually（たいてい）、sometimes（時々）などの頻度を表す副詞は、一般動詞の前に置きます。本文の \"I always wake up at five\" や \"She usually brings tea\" の語順に注目してください。「いつものこと」を生き生きと描く基本の形です。",
+    example:"I always wake up at five.",
+    exercise:{ q:"次の文の（ ）に頻度を表す語を入れる位置は？ \"I ( ) drink tea in the morning.\"", choices:["文の最後","主語の後・動詞の前","主語の前"], answer:1, why:"頻度を表す副詞（always など）は、一般動詞の前に置くのが基本です。" } },
+  vocab:[
+    {w:"wake up", m:"目が覚める・起きる", s:"I always wake up at five."},
+    {w:"vegetable", m:"野菜", s:"I grow vegetables in my garden."},
+    {w:"tomato", m:"トマト", s:"The tomatoes are red and round."},
+    {w:"cucumber", m:"キュウリ", s:"I pick three cucumbers."},
+    {w:"neighbor", m:"隣人・近所の人", s:"My neighbor, Mrs. Kimura, comes at six."},
+    {w:"share", m:"分け合う・共有する", s:"We share the morning sun."},
+    {w:"fresh", m:"新鮮な", s:"Fresh vegetables are good for breakfast."},
+    {w:"soil", m:"土", s:"I touch the soil with my hands."},
+    {w:"seed", m:"種", s:"Small seeds become tall plants."},
+    {w:"healthy", m:"健康な", s:"Garden work keeps me healthy."}],
+  phrases:[
+    {en:"I grow vegetables in my garden.", ja:"畑で野菜を育てています。"},
+    {en:"Thank you for the tea.", ja:"お茶をありがとう。"},
+    {en:"It keeps me healthy.", ja:"おかげで健康でいられます。"}],
+  quiz:[
+    {q:"What time does the writer wake up?", choices:["At four","At five","At six"], answer:1, why:"\"I always wake up at five\" とあります。"},
+    {q:"What does the writer grow?", choices:["Flowers only","Vegetables","Rice"], answer:1, why:"畑では野菜を育てています。"},
+    {q:"Who comes at six?", choices:["The writer's son","Mrs. Kimura, the neighbor","A station man"], answer:1, why:"隣家の木村さんが6時にやって来ます。"},
+    {q:"Why does the writer like garden work?", choices:["It is easy","It keeps him healthy","He can sell vegetables"], answer:1, why:"\"Garden work keeps me healthy\" とあります。"}],
+  paragraphs:[
+    ["I always wake up at five.","The sky is still a little dark.","I wash my face and make hot tea.","Then I go to my small garden behind the house.","The garden is my favorite place."],
+    ["I grow vegetables in my garden.","In summer, I have tomatoes, cucumbers, and green peppers.","The tomatoes are red and round.","I touch the soil with my hands.","Small seeds become tall plants.","It is slow magic."],
+    ["In spring, I plant seeds in straight lines.", "In summer, the plants grow tall and green.", "In autumn, I pick the last red tomatoes.", "In winter, I rest and read seed catalogs.", "Each season brings different work.", "And each season brings different joy."],
+    ["At six, my neighbor, Mrs. Kimura, comes.","She usually brings tea in a small pot.","We drink tea and talk about the weather.","\"Your tomatoes look happy this year,\" she says.","\"They drink the morning sun,\" I say."],
+    ["I pick three cucumbers and two tomatoes.","I give one tomato to Mrs. Kimura.","She gives me eggs from her chickens.","We share the morning sun, and we share our food.","Fresh vegetables are good for breakfast."],
+    ["Garden work is quiet work.","My hands move, and my mind rests.","I think about the day, and I think about old friends.","Garden work keeps me healthy.","And every morning, the garden says to me, \"Let's begin.\""]]
+},
+{ id:"lasttrain", cover:"🚃", title:"The Last Train Home", titleJa:"最終電車", level:2, genre:"日常",
+  intro:"雨の夜、最終電車で帰る会社員の山田と、壊れた傘に困る学生。小さな親切がめぐる、短くて温かい物語です。",
+  grammar:{ title:"接続詞 when と because", body:"when は「〜のとき」、because は「〜だから」と、文と文を理由や時間でつなぎます。本文の \"When the train stopped, Yamada saw a student\" や \"because his umbrella was broken\" が例です。理由を述べる because は、会話でも作文でも非常によく使います。なお because の文だけを独立させないのが書き言葉の基本です。",
+    example:"He was wet because his umbrella was broken.",
+    exercise:{ q:"次の文の（ ）に入る語は？ \"I stayed home ( ) I was tired.\"", choices:["when","because","but"], answer:1, why:"「疲れていたから」という理由を表すので、because が入ります。" } },
+  vocab:[
+    {w:"umbrella", m:"傘", s:"His umbrella was broken."},
+    {w:"wet", m:"ぬれた", s:"His shoes and bag were wet."},
+    {w:"platform", m:"（駅の）ホーム", s:"A student stood on the platform."},
+    {w:"empty", m:"空の・人のいない", s:"The train was almost empty."},
+    {w:"seat", m:"席", s:"Yamada sat near the door."},
+    {w:"offer", m:"申し出る・差し出す", s:"Yamada offered his umbrella."},
+    {w:"hesitate", m:"ためらう", s:"The student hesitated."},
+    {w:"grateful", m:"感謝している", s:"\"I am very grateful,\" he said."},
+    {w:"kind", m:"親切な", s:"Small kindness travels far."},
+    {w:"far", m:"遠くまで", s:"Small kindness travels far."}],
+  phrases:[
+    {en:"Please use mine.", ja:"私のを使ってください。"},
+    {en:"I am very grateful.", ja:"本当に感謝しています。"},
+    {en:"Small kindness travels far.", ja:"小さな親切は遠くまで届きます。"}],
+  quiz:[
+    {q:"Why was the student wet?", choices:["He had no coat","His umbrella was broken","He fell in a river"], answer:1, why:"学生の傘が壊れていたため、ぬれてしまいました。"},
+    {q:"What did Yamada offer to the student?", choices:["His seat","His umbrella","His ticket"], answer:1, why:"山田は自分の傘を学生に差し出しました。"},
+    {q:"How many stops did the student need?", choices:["One stop","Two stops","Five stops"], answer:0, why:"学生の家は次の駅から近く、一駅だけの距離でした（本文: \"My house is near the next station\"）。"},
+    {q:"What happened the next morning?", choices:["The umbrella was at Yamada's door","The student moved away","It rained again"], answer:0, why:"翌朝、山田の家のドアの前に、傘とお礼のメモが置かれていました。"}],
+  paragraphs:[
+    ["It was raining hard that night.","Yamada finished his work at ten.","He ran to the station in the rain.","The last train was waiting at the platform.","He got on the train and sat near the door.","The train was almost empty."],
+    ["Yamada looked out of the window.", "The city lights were wet and blurred.", "He thought about his long day.", "Two meetings, three reports, and cold coffee.", "He was tired, but the day was done.", "Soon he would be home, and the rain would be only a sound."],
+    ["At the next station, a student got on.","He was young, maybe eighteen.","His shoes and bag were wet because his umbrella was broken.","He stood near the door and looked at the floor.","Water fell from his coat, drop by drop."],
+    ["When the train stopped at the next station, the student did not get off.","He looked out of the window at the rain.","\"My house is near the next station,\" he said to himself.","\"But the rain...\"","Yamada listened quietly."],
+    ["Yamada stood up and offered his umbrella.","\"Please use mine,\" he said.","\"I have a short walk, and my coat is strong.\"","The student hesitated.","\"But you will be wet,\" he said.","\"A little rain is fine,\" Yamada smiled.","\"I am very grateful,\" the student said, and took the umbrella."],
+    ["The next morning, the sky was blue.","Yamada opened his front door.","His umbrella stood there, clean and dry.","A small note was on it.","\"Thank you. One day, I will help someone too.\"","Yamada smiled.","Small kindness travels far."]]
+},
+{ id:"stars", cover:"⭐", title:"Why Do Stars Shine?", titleJa:"星はなぜ光るのか", level:2, genre:"科学読み物",
+  intro:"夜空の星は、なぜ光って見えるのでしょうか。小さな頃の疑問に、やさしい英語で答える科学読み物です。比較級・最上級の宝庫でもあります。",
+  grammar:{ title:"比較級と最上級", body:"2つを比べるときは比較級（bigger, brighter）、3つ以上の中で一番のときは最上級（the biggest, the brightest）を使います。本文には \"hotter than a stove\" や \"the nearest star\" のような表現が次々に登場します。短い形容詞は -er / -est、長い形容詞は more / the most をつけるのが基本です。",
+    example:"The sun is much bigger than the earth.",
+    exercise:{ q:"次の文の（ ）に入る語句は？ \"This mountain is ( ) in Japan.\"", choices:["higher","the highest","high"], answer:1, why:"日本で「一番高い」という最上級には the highest が必要です。" } },
+  vocab:[
+    {w:"shine", m:"輝く", s:"Stars shine in the night sky."},
+    {w:"huge", m:"巨大な", s:"A star is a huge ball of gas."},
+    {w:"gas", m:"気体・ガス", s:"A star is a huge ball of gas."},
+    {w:"burn", m:"燃える", s:"The gas burns and makes light."},
+    {w:"heat", m:"熱", s:"It also makes heat."},
+    {w:"distance", m:"距離", s:"The light travels a long distance."},
+    {w:"travel", m:"進む・旅する", s:"The light travels a long distance."},
+    {w:"nearest", m:"最も近い", s:"The sun is the nearest star."},
+    {w:"tiny", m:"とても小さい", s:"Other stars look tiny."},
+    {w:"however", m:"しかしながら", s:"However, many stars are bigger than the sun."}],
+  phrases:[
+    {en:"Why do stars shine?", ja:"星はなぜ光るのですか？"},
+    {en:"It takes four years.", ja:"4年かかります。"},
+    {en:"The night sky is a storybook.", ja:"夜空は一冊の物語の本です。"}],
+  quiz:[
+    {q:"What is a star?", choices:["A ball of ice","A huge ball of hot gas","A kind of cloud"], answer:1, why:"星は熱いガスの巨大な球体です。"},
+    {q:"What is the nearest star to us?", choices:["The moon","The sun","Sirius"], answer:1, why:"私たちに最も近い星は太陽です。"},
+    {q:"How long does light from a near star take to reach us?", choices:["Four minutes","Four years","Four days"], answer:1, why:"近い星でも、光が届くのに4年かかるものがあります。"},
+    {q:"Why do big stars look tiny?", choices:["They are very far away","They are cold","They move fast"], answer:0, why:"とても遠くにあるため、小さく見えるのです。"}],
+  paragraphs:[
+    ["On a clear night, look up at the sky.","You can see hundreds of stars.","They shine like small lights.","But why do stars shine?","A star is a huge ball of gas.","The gas is hotter than any fire on earth.","It burns and makes light, and it also makes heat."],
+    ["The sun is a star.","It is the nearest star to us.","The sun looks big and bright because it is near.","Its light takes only eight minutes to reach the earth.","The sun is much bigger than the earth.","More than a million earths can fit inside it."],
+    ["Other stars are very far away.","Their light travels a long distance.","The light of a near star takes four years to reach us.","So we see the star as it was four years ago.","The night sky is a storybook of the past."],
+    ["Our moon is not a star.", "It does not make its own light.", "It shines because the sun's light falls on it.", "Planets are the same.", "They borrow light from the sun.", "Only stars make their own light.", "That is why stars are special."],
+    ["Some stars look big, and some look tiny.","However, \"tiny\" stars are often bigger than the sun.","They look small because they are so far away.","There are more stars in the sky than people on earth.","The brightest star in the night sky is called Sirius."],
+    ["Next time, look up on a clear night.","Each small light is a great burning sun.","Some of their light started its trip before you were born.","The stars shine, and they tell us an old, old story.","All we need is a dark night and quiet eyes."]]
+},
+{ id:"mountains", cover:"⛰️", title:"A Trip to the Mountains", titleJa:"山への旅", level:3, genre:"旅",
+  intro:"秋の休日、一人で山に登る大介。途中の天気の急変、山小屋での出会い、そして朝日のご褒美。助動詞の使い方にも注目です。",
+  grammar:{ title:"助動詞 will / must / should", body:"will は「〜するつもり・〜だろう」、must は「〜しなければならない」、should は「〜すべきだ・〜した方がよい」という意味を動詞に添えます。いずれも後ろは動詞の原形です。本文では天気の変化に応じた判断（\"I should go back\" \"I must hurry\"）に使われています。強さの順は must ＞ should と覚えるとよいでしょう。",
+    example:"I should go back before the rain.",
+    exercise:{ q:"次の文の（ ）に入る語は？ \"You ( ) rest. You look tired.\"", choices:["should","should to","shoulds"], answer:0, why:"「休んだ方がよい」という助言には should を使い、後ろは動詞の原形（rest）です。" } },
+  vocab:[
+    {w:"trail", m:"登山道", s:"The trail was quiet in the morning."},
+    {w:"backpack", m:"リュックサック", s:"He put food and water in his backpack."},
+    {w:"cloud", m:"雲", s:"Dark clouds were coming from the west."},
+    {w:"hut", m:"山小屋", s:"There was a mountain hut near the top."},
+    {w:"keeper", m:"管理人", s:"The hut keeper gave him hot soup."},
+    {w:"valley", m:"谷", s:"He could see the whole valley."},
+    {w:"sunrise", m:"日の出", s:"They watched the sunrise together."},
+    {w:"golden", m:"金色の", s:"The sea of clouds was golden."},
+    {w:"grateful", m:"感謝している", s:"He felt grateful for the mountain."},
+    {w:"journey", m:"旅", s:"It was a short journey, but a deep one."}],
+  phrases:[
+    {en:"I should go back before the rain.", ja:"雨が来る前に戻るべきです。"},
+    {en:"It was worth it.", ja:"その価値がありました。"},
+    {en:"A sea of clouds.", ja:"雲海。"}],
+  quiz:[
+    {q:"Why did Daisuke hurry?", choices:["He was hungry","Dark clouds were coming","The last bus was early"], answer:1, why:"西から黒い雲が近づいていたため、急ぐ必要がありました。"},
+    {q:"Where did he stay that night?", choices:["In a tent","At home","In a mountain hut"], answer:2, why:"山頂近くの山小屋に泊まりました。"},
+    {q:"What did the hut keeper give him?", choices:["A map","Hot soup","A new backpack"], answer:1, why:"山小屋の管理人が温かいスープをくれました。"},
+    {q:"What did they see in the morning?", choices:["A golden sea of clouds at sunrise","Snow on the trail","A bear"], answer:0, why:"日の出とともに金色の雲海が広がっていました。"}],
+  paragraphs:[
+    ["Daisuke loves the mountains.","One autumn morning, he took a train to Mount Hoshi.","He put food and water in his backpack.","The trail was quiet in the morning.","Birds sang in the trees, and the air was cold and clean.","\"Today, I will reach the top,\" he said."],
+    ["The first part of the trail went through a dark forest.", "Tall cedar trees stood on both sides.", "The ground was soft with fallen leaves.", "Sometimes, Daisuke stopped and listened.", "There was no sound but the wind and his own steps.", "Walking alone, he felt his mind become quiet."],
+    ["He walked for three hours.","The trees became smaller, and the sky became wider.","From a rock, he could see the whole valley.","A river shone far below like a silver line.","Daisuke ate his lunch and smiled.","\"It is a perfect day,\" he thought."],
+    ["But after lunch, the wind changed.","Dark clouds were coming from the west.","\"I should go back before the rain,\" Daisuke thought.","\"But the top is so near...\"","He walked faster.","Soon, cold rain began to fall."],
+    ["The trail was wet, and the rocks were dangerous.","\"I must not hurry now,\" he told himself.","He walked slowly and carefully.","Then he saw a light through the rain.","It was a mountain hut near the top.","The hut keeper opened the door.","\"Come in, come in,\" he said.","\"You must be cold.\""],
+    ["The hut was warm and smelled of wood.","The keeper gave him hot soup and dry clothes.","Other walkers sat around the table and told stories.","Outside, the rain sang on the roof all night.","Daisuke slept in a warm bed.","\"Tomorrow, we will see,\" the keeper said."],
+    ["In the morning, the sky was clear.","Daisuke and the keeper stood in front of the hut.","Below them, a sea of clouds covered the valley.","The sunrise turned the clouds golden.","\"It was worth it,\" Daisuke said quietly.","It was a short journey, but a deep one.","He felt grateful for the mountain, and for kind people."]]
+},
+{ id:"clockshop", cover:"🕰️", title:"The Old Clock Shop", titleJa:"古い時計店", level:4, genre:"読み物",
+  intro:"駅前の小さな時計店に持ち込まれた、船乗りだった祖父の時計。修理をめぐる静かな物語で、過去完了の世界へご案内します。",
+  grammar:{ title:"過去完了形（had＋過去分詞）の入り口", body:"過去のある時点より「さらに前」の出来事を表す形です。\"When I arrived, the shop had closed\"（着いたときには、店はすでに閉まっていた）のように、過去の2つの出来事の前後関係を整理できます。本文では船乗りの過去を描く場面で使われています。難しく見えますが、「過去の過去」と捉えれば十分です。Japan Times の記事でも、出来事の経緯を説明する際に頻出します。",
+    example:"The sailor had carried the clock for forty years.",
+    exercise:{ q:"次の文の（ ）に入る語句は？ \"When we got home, the rain ( ) stopped.\"", choices:["has","had","have"], answer:1, why:"「家に着いた（過去）ときには、雨はすでにやんでいた（それより前）」という関係なので、過去完了 had が入ります。" } },
+  vocab:[
+    {w:"repair", m:"修理する", s:"He repairs clocks and watches."},
+    {w:"sailor", m:"船員・船乗り", s:"My grandfather was a sailor."},
+    {w:"exactly", m:"正確に・ちょうど", s:"It stopped at exactly 6:12."},
+    {w:"engraved", m:"刻まれた", s:"Words were engraved on the back."},
+    {w:"case", m:"ケース・側（そく）", s:"He opened the back of the case."},
+    {w:"patient", m:"辛抱強い", s:"Repairing clocks needs patient hands."},
+    {w:"tick", m:"（時計の）チクタクという音", s:"The shop was full of the sound of ticks."},
+    {w:"memory", m:"思い出・記憶", s:"Every clock holds a memory."},
+    {w:"carefully", m:"注意深く・丁寧に", s:"He worked slowly and carefully."},
+    {w:"alive", m:"生きている", s:"The clock came alive again."}],
+  phrases:[
+    {en:"Can you repair this clock?", ja:"この時計を修理できますか？"},
+    {en:"Every clock holds a memory.", ja:"どの時計にも思い出が宿っています。"},
+    {en:"It came alive again.", ja:"それは再び息を吹き返しました。"}],
+  quiz:[
+    {q:"What time did the old clock stop at?", choices:["At 5:30","At 6:12","At 12:06"], answer:1, why:"時計はちょうど6時12分で止まっていました。"},
+    {q:"What was engraved on the clock?", choices:["A ship's name","\"For my son, 1974\"","The shop's address"], answer:1, why:"裏側には「息子へ、1974年」と刻まれていました。"},
+    {q:"Why did the grandfather stop using the clock?", choices:["It was too old","He gave his heart to a new clock","He had retired from the sea and put it away"], answer:2, why:"海を退いたとき、時計も一緒にしまい込んだのでした。"},
+    {q:"What does Mr. Ono think about clocks?", choices:["They are just machines","Every clock holds a memory","Old clocks should be thrown away"], answer:1, why:"小野さんは「どの時計にも思い出が宿っている」と考えています。"}],
+  paragraphs:[
+    ["There is a small clock shop near the station.","The owner, Mr. Ono, is seventy years old.","He repairs clocks and watches with patient hands.","The shop is full of the sound of ticks, big and small.","\"Every clock holds a memory,\" Mr. Ono often says.","\"My job is to listen to them.\""],
+    ["One afternoon, a young woman came into the shop.","She held an old clock in both hands.","\"Can you repair this clock?\" she asked.","\"It was my grandfather's.\"","\"He was a sailor, and he had carried it across the world.\"","\"It stopped many years ago.\""],
+    ["Mr. Ono took the clock carefully.","It was heavy and made of dark wood.","The clock had stopped at exactly 6:12.","On the back, some words were engraved.","\"For my son, 1974.\"","Mr. Ono looked at the words for a long time.","\"Someone loved this clock,\" he said."],
+    ["That night, Mr. Ono could not stop thinking about the clock.", "He thought about the sailor's long trips.", "Storms, hot ports, cold nights at sea.", "Through all of them, the clock ticked beside him.", "\"A clock like this is a friend,\" Mr. Ono said to the empty shop."],
+    ["He opened the back of the case.","Inside, everything was dry and dusty.","A small spring was broken.","\"The sailor had used this clock for forty years,\" he thought.","\"Then he retired from the sea, and the clock retired too.\"","\"It waited in a dark box, quietly.\"","Mr. Ono worked slowly and carefully for three days."],
+    ["On the third day, the young woman came back.","Mr. Ono put the clock on the counter.","Tick, tick, tick.","The clock came alive again.","Its sound was strong and clear.","The young woman listened with tears in her eyes.","\"Grandfather is back,\" she said softly."],
+    ["After she left, Mr. Ono sat in his quiet shop.","Around him, a hundred clocks ticked together.","He thought about time, and about memories.","A clock can stop, he thought.","But a memory never does.","Outside, the evening bell of the station rang six times."]]
+},
+{ id:"news1", cover:"📰", title:"Small Town Library Opens at Night", titleJa:"小さな町の図書館、夜間開館を始める", level:4, genre:"ニュース",
+  intro:"Japan Times への第一歩として、本物の新聞記事の型（見出し・リード文・本文）で書いたオリジナル記事です。見出しの現在形にも注目してください。",
+  grammar:{ title:"ニュース英語の見出し表現", body:"新聞の見出しでは、過去の出来事を現在形で表すのが慣例です（\"Library Opens at Night\" は「開館した」の意味）。また、未来のことは to不定詞で短く表します（\"Mayor to visit town\" ＝町長が訪問予定）。記事本文のリード（第一段落）には「いつ・どこで・誰が・何を」が凝縮されています。この型を知ると、実際の英字新聞がぐっと読みやすくなります。",
+    example:"Small Town Library Opens at Night",
+    exercise:{ q:"見出し \"Mayor to Visit Town\" の意味は？", choices:["町長は町を訪れたことがある","町長が町を訪問する予定だ","町長は町を訪れたいと思っている"], answer:1, why:"見出しの to不定詞は「〜する予定」という未来を表す決まった形です。" } },
+  vocab:[
+    {w:"announce", m:"発表する", s:"The town announced the plan in March."},
+    {w:"resident", m:"住民", s:"Many residents welcomed the change."},
+    {w:"extend", m:"延長する", s:"The library extended its hours."},
+    {w:"borrow", m:"借りる", s:"People can borrow books until 9 p.m."},
+    {w:"volunteer", m:"ボランティア", s:"Volunteers help at the front desk."},
+    {w:"however", m:"しかしながら", s:"However, weekends are unchanged."},
+    {w:"according to", m:"〜によると", s:"According to the mayor, reading is growing."},
+    {w:"popular", m:"人気のある", s:"The night hours are popular with students."},
+    {w:"plan", m:"計画する", s:"The town plans to add more seats."},
+    {w:"quietly", m:"静かに", s:"People read quietly at long tables."}],
+  phrases:[
+    {en:"According to the mayor...", ja:"町長によると…"},
+    {en:"The library extended its hours.", ja:"図書館は開館時間を延長しました。"},
+    {en:"Many residents welcomed the change.", ja:"多くの住民がその変化を歓迎しました。"}],
+  quiz:[
+    {q:"Until what time is the library open on weekdays now?", choices:["Until 6 p.m.","Until 9 p.m.","Until midnight"], answer:1, why:"平日は午後9時まで開館するようになりました。"},
+    {q:"Who helps at the front desk?", choices:["Students only","Volunteers","The mayor"], answer:1, why:"受付ではボランティアが手伝っています。"},
+    {q:"What will the town do next?", choices:["Close the library on Sundays","Add more seats","Sell the building"], answer:1, why:"町は座席を増やす計画をしています。"},
+    {q:"How do residents feel about the change?", choices:["Many welcome it","Most are angry","Nobody knows about it"], answer:0, why:"\"Many residents welcomed the change\" とあります。多くの住民が歓迎しています。"}],
+  paragraphs:[
+    ["A small library in the town of Hikari has started opening at night, in a first for the town.","The town announced the plan in March, and the new hours began this week.","The library now stays open until 9 p.m. on weekdays.","However, weekend hours are unchanged."],
+    ["According to the town office, the change answers requests from working residents.","\"I finish work at seven,\" said one resident, a nurse at the town hospital.","\"Before, I could never visit the library.\"","\"Now I can borrow books after dinner.\""],
+    ["The library had been open in the town for sixty years.", "It stands on a hill near the station.", "Until this year, it closed at six in the evening.", "Many working residents could not use it.", "The town received more than two hundred letters asking for longer hours."],
+    ["Inside the library, people read quietly at long tables.","Students study near the windows, and older residents read newspapers and novels.","Volunteers help at the front desk in the evening.","The night hours are especially popular with high school students, the library said."],
+    ["The mayor visited the library on the first night.","According to the mayor, reading is growing in the town.","\"A library is the living room of a town,\" he said.","\"We want people to enjoy it longer.\""],
+    ["The town plans to add more seats next year.","It also plans to hold small reading events at night.","\"A town with lights in its library is a town that learns,\" the mayor said.","For Hikari, the nights have become a little brighter."]]
+}
+);
+</script>
+
+<script>
+/* ================= 状態管理 ================= */
+const LS_KEY = "storyEnglish.v1";
+let ST = null;
+function defaultState(){ return { done:{}, totalWords:0, wpmHist:[], vocab:{}, streak:0, lastStudy:"", settings:{fs:"m", dark:false, rate:1} }; }
+function loadST(){
+  try{ const raw = localStorage.getItem(LS_KEY); if(raw) ST = JSON.parse(raw); }catch(e){}
+  if(!ST || typeof ST !== "object") ST = defaultState();
+  if(!ST.settings) ST.settings = defaultState().settings;
+}
+function saveST(){ try{ localStorage.setItem(LS_KEY, JSON.stringify(ST)); }catch(e){} }
+function storyWords(s){ return s.paragraphs.flat().join(" ").split(/\s+/).filter(Boolean).length; }
+function storyById(id){ return STORIES.find(s=>s.id===id); }
+function touchStreak(){
+  const t = todayStr(); if(ST.lastStudy === t) return;
+  const y = new Date(); y.setDate(y.getDate()-1);
+  const ys = y.getFullYear()+"-"+(y.getMonth()+1)+"-"+y.getDate();
+  ST.streak = ST.lastStudy === ys ? ST.streak + 1 : 1;
+  ST.lastStudy = t; saveST();
+}
+function levelDone(lv){ const ss = STORIES.filter(s=>s.level===lv); return ss.length && ss.every(s=>ST.done[s.id]); }
+function levelStarted(lv){ return STORIES.filter(s=>s.level===lv).some(s=>ST.done[s.id]); }
+/* ================= 音声 ================= */
+let enVoice = null;
+function pickEnVoice(){
+  try{
+    const vs = speechSynthesis.getVoices().filter(v=>/^en[-_]/i.test(v.lang));
+    enVoice = vs.find(v=>/en[-_]US/i.test(v.lang) && /Google/i.test(v.name)) || vs.find(v=>/en[-_]US/i.test(v.lang) && /Natural|Samantha|Jenny|Aria/i.test(v.name)) || vs.find(v=>/en[-_]US/i.test(v.lang)) || vs[0] || null;
+  }catch(e){}
+}
+if("speechSynthesis" in window){ pickEnVoice(); speechSynthesis.onvoiceschanged = pickEnVoice; }
+let speakSeq = 0;
+function speakEn(text, rate){
+  if(!("speechSynthesis" in window)) return Promise.resolve();
+  const my = ++speakSeq;
+  return new Promise(res=>{
+    try{
+      const u = new SpeechSynthesisUtterance(text);
+      u.lang = "en-US"; if(enVoice) u.voice = enVoice;
+      u.rate = rate || ST.settings.rate || 1;
+      u.onend = ()=>res(); u.onerror = ()=>res();
+      speechSynthesis.speak(u);
+      setTimeout(()=>{ if(my === speakSeq) res(); }, 15000);
+    }catch(e){ res(); }
+  });
+}
+function stopSpeak(){ speakSeq++; if("speechSynthesis" in window) speechSynthesis.cancel(); }
+/* ================= ホーム ================= */
+const ROADMAP = [
+  {lv:1, label:"中学基礎", sub:"現在形・過去形"},
+  {lv:2, label:"中学発展", sub:"進行形・受け身・比較"},
+  {lv:3, label:"高校入門", sub:"完了形・関係代名詞"},
+  {lv:4, label:"ニュース入門", sub:"報道の型"},
+  {lv:5, label:"Japan Times", sub:"本物の新聞へ"}
+];
+function renderHome(){
+  /* ロードマップ */
+  let current = 5;
+  for(let lv=1; lv<=4; lv++){ if(!levelDone(lv)){ current = lv; break; } }
+  $("#roadmap").innerHTML = ROADMAP.map(r=>{
+    let cls = "";
+    if(r.lv <= 4 && levelDone(r.lv)) cls = "done";
+    else if(r.lv === current) cls = "now";
+    else if(r.lv === 5 && current === 5) cls = "now";
+    return `<div class="rm-step ${cls}">${r.label}<br><span style="font-weight:600;font-size:10.5px">${r.sub}</span></div>`;
+  }).join("");
+  $("#roadmapNote").textContent = current === 5
+    ? "全レベル読了です！ 次は実際の Japan Times の見出し・リード文に挑戦してみましょう。このアプリで身につけた「見出しの型」がそのまま使えます。"
+    : `現在地は「${ROADMAP[current-1].label}」です。レベル${current}の物語を読み終えると次のステップが開きます。`;
+  /* 記録 */
+  const doneCount = Object.keys(ST.done).filter(id=>ST.done[id].done).length;
+  $("#stWords").textContent = ST.totalWords.toLocaleString();
+  $("#stDone").textContent = doneCount + " / " + STORIES.length;
+  const lastWpm = ST.wpmHist.length ? ST.wpmHist[ST.wpmHist.length-1].wpm : null;
+  $("#stWpm").textContent = lastWpm ? lastWpm : "-";
+  $("#stStreak").textContent = ST.streak + "日";
+  const hist = ST.wpmHist.slice(-10);
+  $("#wpmGraph").innerHTML = hist.length >= 2
+    ? `<p class="notice" style="margin-top:12px">読解スピード（WPM）の推移 ※ニュース英語の目安は約150</p><div class="wpm-bar">${hist.map(h=>`<div class="b" style="height:${Math.max(7, Math.min(100, h.wpm/1.6))}%"><span>${h.wpm}</span></div>`).join("")}</div>`
+    : "";
+  /* 復習CTA */
+  const due = dueVocab();
+  $("#vocabCount").textContent = Object.keys(ST.vocab).length;
+  $("#reviewCtaSub").textContent = due.length ? `単語 ${due.length} 語が復習どきです` : "登録した単語が 復習どきになると ここに表示されます";
+  /* 本棚 */
+  const shelves = $("#shelves"); shelves.innerHTML = "";
+  const serial = STORIES.filter(s=>s.serial).sort((a,b)=>a.chapter-b.chapter);
+  const byLevel = lv => STORIES.filter(s=>s.level===lv && !s.serial);
+  const mkShelf = (title, lvLabel, list) => {
+    if(!list.length) return;
+    const h = document.createElement("div");
+    h.innerHTML = `<div class="shelf-title"><span class="lv">${lvLabel}</span>${title}</div>`;
+    list.forEach(s=>{
+      const d = ST.done[s.id];
+      const locked = s.serial && s.chapter > 1 && !(ST.done[serial[s.chapter-2].id] || {}).done;
+      const btn = document.createElement("button");
+      btn.className = "story" + (locked ? " locked" : "");
+      btn.innerHTML = `<span class="cover">${s.cover}</span><span><span class="ttl">${s.serial ? `第${s.chapter}章 ` : ""}${s.title}</span><span class="meta" style="display:block">${s.titleJa}｜${s.genre}｜約${storyWords(s)}語</span><span class="intro" style="display:block">${locked ? "🔒 前の章を読み終えると開きます" : s.intro.slice(0, 42)}…</span></span><span class="badge ${d && d.done ? "done" : ""}">${d && d.done ? "✓ 読了" + (d.score!=null ? ` ${d.score}/${s.quiz.length}` : "") : locked ? "🔒" : "未読"}</span>`;
+      btn.onclick = ()=>{ if(locked){ toast("前の章を読み終えると開きます"); return; } openStory(s.id); };
+      h.appendChild(btn);
+    });
+    shelves.appendChild(h);
+  };
+  mkShelf("連載ミステリー：灯台の光", "連載", serial);
+  for(let lv=1; lv<=4; lv++) mkShelf(["","やさしい読み物","読み応えのある読み物","高校入門の読み物","ニュースと読み物"][lv], "Lv."+lv, byLevel(lv));
+}
+/* ================= リーダー ================= */
+let cur = null; // {story, flat:[{pi,si,text}], startedAt, playing, playIdx, rate, repeat}
+function openStory(id){
+  const s = storyById(id); stopSpeak();
+  cur = { story:s, flat:[], startedAt:null, playing:false, playIdx:0, rate:ST.settings.rate || 1, repeat:false, selIdx:0 };
+  $("#rTitle").textContent = (s.serial ? `第${s.chapter}章 ` : "") + s.title;
+  $("#rMeta").textContent = `${s.titleJa}｜${s.genre}｜レベル${s.level}｜約${storyWords(s)}語｜文法：${s.grammar.title}`;
+  $("#rIntro").innerHTML = `<b>あらすじ：</b>${s.intro}<br><b>この話の文法：</b>${s.grammar.title}／ <b>重要単語：</b>${s.vocab.length}語（本文中の点線の下線をタップ）`;
+  const vocabMap = {};
+  s.vocab.forEach(v=>{ vocabMap[v.w.toLowerCase()] = v; });
+  const body = $("#storyBody");
+  body.className = "fs-" + (ST.settings.fs || "m");
+  body.innerHTML = "";
+  s.paragraphs.forEach((para, pi)=>{
+    const p = document.createElement("p");
+    para.forEach((sent, si)=>{
+      const idx = cur.flat.length;
+      cur.flat.push({pi, si, text:sent});
+      const span = document.createElement("span");
+      span.className = "sent"; span.dataset.idx = idx;
+      span.innerHTML = wrapVocab(sent, vocabMap) + " ";
+      span.addEventListener("click", e=>{
+        if(e.target.classList.contains("vw")) return;
+        selectSentence(idx); playSingle(idx);
+      });
+      p.appendChild(span);
+    });
+    body.appendChild(p);
+  });
+  $$("#speedSeg button").forEach(b=>b.classList.toggle("on", +b.dataset.speed === cur.rate));
+  $("#btnRepeatSent").textContent = "🔂 1文リピート OFF"; $("#btnRepeatSent").classList.remove("on");
+  $("#btnPlayAll").textContent = "▶ 全文を聞く";
+  cur.startedAt = Date.now();
+  showView("view-reader");
+}
+function wrapVocab(sent, vocabMap){
+  return sent.split(/(\s+)/).map(tok=>{
+    if(/^\s+$/.test(tok) || tok === "") return tok;
+    const core = tok.replace(/^[^A-Za-z]+/, "").replace(/[^A-Za-z'’-]+$/, "");
+    const key = core.toLowerCase().replace(/’/g, "'");
+    const v = vocabMap[key] || vocabMap[key.replace(/s$/, "")] || vocabMap[key.replace(/'s$/, "")];
+    if(!v) return escapeHtml(tok);
+    const start = tok.indexOf(core);
+    return escapeHtml(tok.slice(0, start)) + `<span class="vw" data-w="${v.w}">${escapeHtml(core)}</span>` + escapeHtml(tok.slice(start + core.length));
+  }).join("");
+}
+function escapeHtml(t){ return t.replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;"); }
+function selectSentence(idx){
+  cur.selIdx = idx;
+  $$("#storyBody .sent").forEach(el=>el.classList.toggle("sel", +el.dataset.idx === idx));
+}
+function markPlaying(idx){
+  $$("#storyBody .sent").forEach(el=>el.classList.toggle("playing", +el.dataset.idx === idx));
+  if(idx >= 0){
+    const el = $(`#storyBody .sent[data-idx="${idx}"]`);
+    if(el) el.scrollIntoView({block:"center", behavior:"smooth"});
+  }
+}
+async function playSingle(idx){
+  stopSpeak(); cur.playing = false; $("#btnPlayAll").textContent = "▶ 全文を聞く";
+  markPlaying(idx);
+  await speakEn(cur.flat[idx].text, cur.rate);
+  if(cur.repeat){ await speakEn(cur.flat[idx].text, cur.rate); }
+  markPlaying(-1);
+}
+async function playAll(){
+  if(cur.playing){ stopSpeak(); cur.playing = false; $("#btnPlayAll").textContent = "▶ 全文を聞く"; markPlaying(-1); return; }
+  stopSpeak(); cur.playing = true; $("#btnPlayAll").textContent = "⏹ 停止";
+  const mySeq = speakSeq;
+  for(let i = cur.selIdx || 0; i < cur.flat.length; i++){
+    if(!cur.playing) break;
+    cur.playIdx = i; markPlaying(i); selectSentence(i);
+    await speakEn(cur.flat[i].text, cur.rate);
+    if(cur.repeat && cur.playing) await speakEn(cur.flat[i].text, cur.rate);
+    if(!cur.playing) break;
+  }
+  cur.playing = false; $("#btnPlayAll").textContent = "▶ 全文を聞く"; markPlaying(-1);
+}
+document.addEventListener("click", e=>{
+  const vw = e.target.closest(".vw");
+  if(vw){ e.stopPropagation(); openWordPopup(vw.dataset.w); }
+});
+function openWordPopup(word){
+  const s = cur ? cur.story : null;
+  let v = s ? s.vocab.find(x=>x.w.toLowerCase() === word.toLowerCase()) : null;
+  if(!v){ for(const st of STORIES){ v = st.vocab.find(x=>x.w.toLowerCase() === word.toLowerCase()); if(v) break; } }
+  if(!v) return;
+  const registered = !!ST.vocab[v.w.toLowerCase()];
+  openSheet(`<div class="word-big">${v.w}</div>
+    <div class="word-mean">${v.m}</div>
+    <div class="word-ex">"${v.s}"</div>
+    <button class="primary-btn" id="wpSpeak">🔊 発音を聞く</button>
+    <button class="ghost-btn" id="wpAdd">${registered ? "✓ 単語帳に登録済み" : "📚 単語帳に追加する"}</button>
+    <button class="ghost-btn" onclick="closeSheet()">閉じる</button>`);
+  $("#wpSpeak").onclick = ()=>speakEn(v.w, 0.9);
+  $("#wpAdd").onclick = ()=>{ if(!registered){ addVocab(v); toast(`「${v.w}」を単語帳に追加しました`); } closeSheet(); };
+}
+function finishReading(){
+  stopSpeak(); cur.playing = false;
+  const s = cur.story;
+  const mins = Math.max(0.2, (Date.now() - cur.startedAt) / 60000);
+  const wpm = Math.round(storyWords(s) / mins);
+  const rec = ST.done[s.id] || {};
+  rec.readCount = (rec.readCount || 0) + 1;
+  rec.wpm = wpm; ST.done[s.id] = rec;
+  ST.totalWords += storyWords(s);
+  ST.wpmHist.push({date: todayStr(), wpm}); if(ST.wpmHist.length > 30) ST.wpmHist = ST.wpmHist.slice(-30);
+  touchStreak(); saveST();
+  openSheet(`<h2>🎉 読了おつかれさまでした</h2>
+    <p style="font-weight:800;line-height:1.9">「${s.title}」を読み終えました。<br>今回の読解スピード： <b style="font-size:19px">${wpm} WPM</b>（約${storyWords(s)}語）<br><span style="color:var(--sub);font-size:13px">ニュース英語の目安は約150 WPM。数字は目安です。速さより「意味を取りながら読めたか」を大切に。</span></p>
+    <button class="primary-btn" id="finQuiz">📝 理解度クイズへ進む</button>
+    <button class="ghost-btn" id="finStudy">🎓 文法とフレーズだけ見る</button>
+    <button class="ghost-btn" onclick="closeSheet()">閉じる</button>`);
+  $("#finQuiz").onclick = ()=>{ closeSheet(); openQuiz(s.id); };
+  $("#finStudy").onclick = ()=>{ closeSheet(); openStudy(s.id); };
+  confetti(10);
+}
+</script>
+
+<script>
+/* ================= 理解クイズ ================= */
+let quizState = null;
+function openQuiz(id){
+  const s = storyById(id);
+  quizState = { story:s, idx:0, score:0, locked:false };
+  $("#quizMeta").textContent = `${s.title}｜全${s.quiz.length}問`;
+  showView("view-quiz"); renderQuizQ();
+}
+function renderQuizQ(){
+  const { story:s, idx } = quizState;
+  const card = $("#quizCard");
+  if(idx >= s.quiz.length){
+    const rec = ST.done[s.id] || {};
+    rec.done = true; if(rec.score == null || quizState.score > rec.score) rec.score = quizState.score;
+    ST.done[s.id] = rec; touchStreak(); saveST();
+    card.innerHTML = `<h3>結果</h3>
+      <p style="font-size:21px;font-weight:900;text-align:center;margin:10px 0">${quizState.score} / ${s.quiz.length} 問正解</p>
+      <p style="font-weight:700;line-height:1.8;text-align:center">${quizState.score === s.quiz.length ? "全問正解！ 内容がしっかり掴めています。" : quizState.score >= s.quiz.length - 1 ? "よく読めています。間違えた問題の解説を確認しましょう。" : "大意は掴めています。本文を音声で聞きながら読み直すと、理解が深まります。"}</p>
+      <button class="primary-btn" id="qzStudy">🎓 文法と会話フレーズへ</button>
+      <button class="ghost-btn" id="qzHome">📚 本棚へ戻る</button>`;
+    $("#qzStudy").onclick = ()=>openStudy(s.id);
+    $("#qzHome").onclick = ()=>{ renderHome(); showView("view-home"); };
+    if(quizState.score === s.quiz.length) confetti(12);
+    return;
+  }
+  const q = s.quiz[idx];
+  card.innerHTML = `<h3>Q${idx+1} / ${s.quiz.length}</h3><div class="quiz-q">${q.q}</div>
+    ${q.choices.map((c,i)=>`<button class="quiz-opt" data-i="${i}">${c}</button>`).join("")}
+    <div class="quiz-why" id="quizWhy"></div>
+    <button class="primary-btn" id="quizNext" style="display:none">${idx+1 >= s.quiz.length ? "結果を見る" : "次の問題へ"}</button>`;
+  quizState.locked = false;
+  $$("#quizCard .quiz-opt").forEach(btn=>{
+    btn.onclick = ()=>{
+      if(quizState.locked) return; quizState.locked = true;
+      const chosen = +btn.dataset.i;
+      const right = chosen === q.answer;
+      if(right) quizState.score++;
+      btn.classList.add(right ? "right" : "wrong");
+      $$("#quizCard .quiz-opt")[q.answer].classList.add("right");
+      const why = $("#quizWhy");
+      why.style.display = "block";
+      why.innerHTML = `<b>${right ? "⭕ 正解！" : "❌ 残念"} 解説：</b>${q.why}`;
+      $("#quizNext").style.display = "block";
+    };
+  });
+  $("#quizNext").onclick = ()=>{ quizState.idx++; renderQuizQ(); };
+}
+/* ================= 文法・フレーズ ================= */
+let mediaRec = null, mediaChunks = [], recPhraseIdx = null, recStream = null;
+function openStudy(id){
+  const s = storyById(id);
+  $("#studyMeta").textContent = `${s.title}｜${s.titleJa}`;
+  const g = s.grammar;
+  $("#grammarCard").innerHTML = `<h3>🎓 文法ポイント：${g.title}</h3>
+    <p style="line-height:1.85;font-size:14.5px">${g.body}</p>
+    <div class="phrase" style="margin-top:10px"><div class="en">${g.example}</div><div class="ja">本文からの例文</div></div>
+    <div class="quiz-q" style="font-size:15px">${g.exercise.q}</div>
+    ${g.exercise.choices.map((c,i)=>`<button class="quiz-opt" data-gi="${i}">${c}</button>`).join("")}
+    <div class="quiz-why" id="grWhy"></div>`;
+  $$("#grammarCard .quiz-opt").forEach(btn=>{
+    btn.onclick = ()=>{
+      const chosen = +btn.dataset.gi; const right = chosen === g.exercise.answer;
+      btn.classList.add(right ? "right" : "wrong");
+      $$("#grammarCard .quiz-opt")[g.exercise.answer].classList.add("right");
+      const why = $("#grWhy"); why.style.display = "block";
+      why.innerHTML = `<b>${right ? "⭕ 正解！" : "❌ 残念"} 解説：</b>${g.exercise.why}`;
+    };
+  });
+  const list = $("#phraseList"); list.innerHTML = "";
+  s.phrases.forEach((ph, i)=>{
+    const d = document.createElement("div"); d.className = "phrase";
+    d.innerHTML = `<div class="en">${ph.en}</div><div class="ja">${ph.ja}</div>
+      <div class="row">
+        <button class="pbtn" data-act="model">🔊 お手本</button>
+        <button class="pbtn" data-act="rec">● 録音する</button>
+        <button class="pbtn" data-act="playmine" disabled style="opacity:.5">▶ 自分の声</button>
+        <button class="pbtn" data-act="check">🎤 発音チェック</button>
+      </div><div class="ja recog-out" style="min-height:16px"></div>`;
+    const out = d.querySelector(".recog-out");
+    const playmineBtn = d.querySelector('[data-act="playmine"]');
+    d.querySelector('[data-act="model"]').onclick = ()=>speakEn(ph.en, 0.92);
+    d.querySelector('[data-act="rec"]').onclick = async ev=>{
+      const btn = ev.target;
+      if(mediaRec && mediaRec.state === "recording"){ mediaRec.stop(); btn.textContent = "● 録音する"; btn.classList.remove("rec"); return; }
+      try{
+        recStream = await navigator.mediaDevices.getUserMedia({audio:true});
+        mediaChunks = [];
+        mediaRec = new MediaRecorder(recStream);
+        mediaRec.ondataavailable = e=>mediaChunks.push(e.data);
+        mediaRec.onstop = ()=>{
+          const url = URL.createObjectURL(new Blob(mediaChunks, {type:"audio/webm"}));
+          playmineBtn.disabled = false; playmineBtn.style.opacity = 1;
+          playmineBtn.onclick = ()=>{ const a = new Audio(url); a.play(); };
+          recStream.getTracks().forEach(t=>t.stop());
+          out.textContent = "録音できました。「自分の声」で聞き比べてみましょう。";
+        };
+        mediaRec.start(); btn.textContent = "⏹ 録音を止める"; btn.classList.add("rec");
+        out.textContent = "録音中…フレーズを声に出してください。";
+      }catch(e){ out.textContent = "マイクが使えませんでした（ブラウザのマイク許可をご確認ください）。"; }
+    };
+    d.querySelector('[data-act="check"]').onclick = ()=>{
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+      if(!SR){ out.textContent = "このブラウザでは発音チェック（音声認識）が使えません。録音と聞き比べをご利用ください。"; return; }
+      const r = new SR(); r.lang = "en-US"; r.interimResults = false;
+      out.textContent = "🎤 聞き取り中…フレーズを話してください。";
+      r.onresult = e=>{
+        const heard = e.results[0][0].transcript;
+        const norm = t => t.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(Boolean);
+        const target = new Set(norm(ph.en)); const got = norm(heard);
+        const hit = got.filter(w=>target.has(w)).length;
+        const ratio = target.size ? hit / target.size : 0;
+        const mark = ratio >= 0.8 ? "◎ よく伝わりました！" : ratio >= 0.5 ? "○ だいたい伝わっています" : "△ もう一度ゆっくり挑戦を";
+        out.textContent = `${mark}（認識結果： "${heard}"）`;
+      };
+      r.onerror = ()=>{ out.textContent = "うまく聞き取れませんでした。静かな場所でもう一度どうぞ。"; };
+      try{ r.start(); }catch(e){}
+    };
+    list.appendChild(d);
+  });
+  showView("view-study");
+}
+/* ================= 単語帳（間隔反復） ================= */
+function addVocab(v){
+  const key = v.w.toLowerCase();
+  if(ST.vocab[key]) return;
+  ST.vocab[key] = { w:v.w, m:v.m, s:v.s || "", box:0, last:0 };
+  saveST();
+}
+function dueVocab(){
+  const now = Date.now();
+  return Object.values(ST.vocab).filter(v=> v.box < 5 && (v.last === 0 || now - v.last > INTERVALS[v.box]));
+}
+let reviewState = null;
+function renderVocab(){
+  const all = Object.values(ST.vocab);
+  const due = dueVocab();
+  $("#vocabMeta").textContent = `登録 ${all.length} 語｜復習どき ${due.length} 語`;
+  const rv = $("#vocabReview");
+  if(reviewState){ renderReviewCard(); }
+  else {
+    rv.innerHTML = due.length
+      ? `<button class="review-cta" id="startReview"><span>🔁 復習をはじめる<span class="small">${due.length} 語が待っています</span></span><span class="arr">→</span></button>`
+      : `<div class="card"><p style="font-weight:800">🎉 いま復習どきの単語はありません。</p><p class="notice">物語を読みながら点線の下線の単語をタップすると、単語帳に登録できます。登録した単語は、忘れた頃に自動で復習どきになります。</p></div>`;
+    const b = $("#startReview");
+    if(b) b.onclick = ()=>{ reviewState = { queue: shuffle(dueVocab()), idx:0, flipped:false }; renderVocab(); };
+  }
+  $("#vocabList").innerHTML = all.length
+    ? all.sort((a,b)=>a.w.localeCompare(b.w)).map(v=>`<div style="display:flex;align-items:center;gap:9px;padding:7px 0;border-bottom:1px solid var(--line)"><span style="font-family:Georgia,serif;font-weight:700;font-size:16.5px">${v.w}</span><span style="font-weight:700;font-size:13.5px;color:var(--sub)">${v.m}</span><span style="margin-left:auto;font-size:12px" title="定着度">${"●".repeat(v.box)}${"○".repeat(5-v.box)}</span><button class="pbtn" data-del="${v.w.toLowerCase()}">削除</button></div>`).join("")
+    : `<p class="notice">まだ単語が登録されていません。</p>`;
+  $$("#vocabList [data-del]").forEach(btn=>{ btn.onclick = ()=>{ delete ST.vocab[btn.dataset.del]; saveST(); renderVocab(); }; });
+}
+function renderReviewCard(){
+  const rv = $("#vocabReview");
+  const { queue, idx } = reviewState;
+  if(idx >= queue.length){
+    rv.innerHTML = `<div class="card" style="text-align:center"><p style="font-size:19px;font-weight:900">🎉 復習おつかれさまでした</p><p class="notice">${queue.length}語を確認しました。間隔をあけて、また復習どきに登場します。</p><button class="primary-btn" id="revDone">ホームへ戻る</button></div>`;
+    $("#revDone").onclick = ()=>{ reviewState = null; renderHome(); showView("view-home"); };
+    reviewState = null; return;
+  }
+  const v = queue[idx];
+  rv.innerHTML = `<div class="vcard" id="vcard">
+      <div class="w">${v.w}</div>
+      ${reviewState.flipped ? `<div class="m">${v.m}</div>${v.s ? `<div class="word-ex">"${v.s}"</div>` : ""}` : `<div class="hint">タップで意味を表示 🔊は発音</div>`}
+    </div>
+    <div style="display:flex;gap:8px;margin-top:10px;align-items:center">
+      <span class="chip">${idx+1} / ${queue.length}</span>
+      <button class="pbtn" id="vSpeak">🔊 発音</button>
+    </div>
+    ${reviewState.flipped ? `<div class="grade-row"><button class="grade ng" id="vNg">まだ覚えていない</button><button class="grade ok" id="vOk">覚えた！</button></div>` : ""}`;
+  $("#vcard").onclick = ()=>{ if(!reviewState.flipped){ reviewState.flipped = true; renderReviewCard(); } };
+  $("#vSpeak").onclick = e=>{ e.stopPropagation(); speakEn(v.w, 0.9); };
+  if(reviewState.flipped){
+    const grade = ok=>{
+      const rec = ST.vocab[v.w.toLowerCase()];
+      if(rec){ rec.box = ok ? Math.min(5, rec.box + 1) : 0; rec.last = Date.now(); }
+      saveST(); reviewState.idx++; reviewState.flipped = false; renderVocab();
+    };
+    $("#vOk").onclick = ()=>grade(true);
+    $("#vNg").onclick = ()=>grade(false);
+  }
+}
+/* ================= 設定・初期化 ================= */
+function openSettings(){
+  const st = ST.settings;
+  openSheet(`<h2>⚙️ 設定</h2>
+    <div class="switchrow"><span>文字サイズ<span class="desc">物語の本文の大きさ</span></span>
+      <span class="seg" id="fsSeg"><button data-fs="s">小</button><button data-fs="m" class="on">中</button><button data-fs="l">大</button></span></div>
+    <div class="switchrow"><span>読み上げ速度<span class="desc">お手本・全文読み上げの速さ</span></span>
+      <span class="seg" id="rateSeg"><button data-rate="0.75">0.75×</button><button data-rate="1" class="on">1.0×</button><button data-rate="1.25">1.25×</button></span></div>
+    <div class="switchrow"><span>ダークモード<span class="desc">夜の読書に目にやさしく</span></span><button class="switch ${st.dark?"on":""}" id="swDark"></button></div>
+    <button class="modebtn" id="setReset" style="display:block;width:100%;text-align:left;background:#f8d7d2;border-radius:14px;padding:13px 15px;font-weight:900;margin-top:10px">🗑️ 学習記録をすべてリセット</button>
+    <button class="ghost-btn" onclick="closeSheet()">閉じる</button>
+    <p class="notice">記録はこの端末のブラウザ内にだけ保存されます。使用した物語はすべて書き下ろしオリジナルで、著作権フリーです。</p>`);
+  $$("#fsSeg button").forEach(b=>{ b.classList.toggle("on", b.dataset.fs === st.fs); b.onclick = ()=>{ st.fs = b.dataset.fs; saveST(); $$("#fsSeg button").forEach(x=>x.classList.toggle("on", x===b)); toast("文字サイズを変更しました（物語を開いたときに反映）"); }; });
+  $$("#rateSeg button").forEach(b=>{ b.classList.toggle("on", +b.dataset.rate === st.rate); b.onclick = ()=>{ st.rate = +b.dataset.rate; saveST(); $$("#rateSeg button").forEach(x=>x.classList.toggle("on", x===b)); }; });
+  $("#swDark").onclick = e=>{ st.dark = !st.dark; e.target.classList.toggle("on", st.dark); document.body.classList.toggle("dark", st.dark); saveST(); };
+  $("#setReset").onclick = ()=>{ if(confirm("学習記録（読了・単語帳・WPM）をすべて消しますか？")){ ST = defaultState(); ST.settings = st; saveST(); closeSheet(); renderHome(); toast("リセットしました"); } };
+}
+$("#btnSettings").addEventListener("click", openSettings);
+$("#btnVocabTop").addEventListener("click", ()=>{ reviewState = null; renderVocab(); showView("view-vocab"); });
+$("#btnReviewCta").addEventListener("click", ()=>{ reviewState = null; renderVocab(); showView("view-vocab"); const due = dueVocab(); if(due.length){ reviewState = { queue: shuffle(due), idx:0, flipped:false }; renderVocab(); } });
+$$("[data-go]").forEach(b=>b.addEventListener("click", ()=>{ stopSpeak(); if(b.dataset.go === "view-home") renderHome(); showView(b.dataset.go); }));
+$("#btnReaderBack").addEventListener("click", ()=>{ stopSpeak(); if(cur) cur.playing = false; renderHome(); showView("view-home"); });
+$("#btnQuizBack").addEventListener("click", ()=>{ if(quizState) openStory(quizState.story.id); });
+$("#btnStudyBack").addEventListener("click", ()=>{ renderHome(); showView("view-home"); });
+$("#btnPlayAll").addEventListener("click", playAll);
+$("#btnRepeatSent").addEventListener("click", e=>{ cur.repeat = !cur.repeat; e.target.textContent = `🔂 1文リピート ${cur.repeat ? "ON" : "OFF"}`; e.target.classList.toggle("on", cur.repeat); });
+$("#speedSeg").addEventListener("click", e=>{ const b = e.target.closest("[data-speed]"); if(!b) return; cur.rate = +b.dataset.speed; $$("#speedSeg button").forEach(x=>x.classList.toggle("on", x===b)); });
+$("#btnFinish").addEventListener("click", finishReading);
+$("#storyBody").addEventListener("click", ()=>{}, true);
+loadST();
+document.body.classList.toggle("dark", !!ST.settings.dark);
+renderHome();
+</script>
+</body>
+</html>
