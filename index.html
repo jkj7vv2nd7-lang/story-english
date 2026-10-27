@@ -2616,6 +2616,7 @@ function renderQuizQ(){
 /* ================= 文法・フレーズ ================= */
 let mediaRec = null, mediaChunks = [], recPhraseIdx = null, recStream = null;
 let activeSR = null;
+let recStarting = false, recStartedAt = 0;
 function pickRecMime(){
   if(typeof MediaRecorder === "undefined" || !MediaRecorder.isTypeSupported) return "";
   const cands = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/aac"];
@@ -2667,11 +2668,16 @@ function openStudy(id){
     };
     recBtn.onclick = async ()=>{
       if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} return; }
+      if(recStarting) return;
       if(typeof MediaRecorder === "undefined" || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
         out.textContent = "このブラウザでは録音が使えませんでした。iPhoneの場合はSafariで開いてお試しください。"; return;
       }
+      recStarting = true;
       try{
+        try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
+        if(activeSR){ const s0 = activeSR; activeSR = null; s0.dead = true; s0.btn.textContent = "🎤 発音チェック"; try{ s0.r.abort(); }catch(e){} }
         recStream = await navigator.mediaDevices.getUserMedia({audio:true});
+        await new Promise(res=>setTimeout(res, 300));
         mediaChunks = [];
         const mime = pickRecMime();
         mediaRec = mime ? new MediaRecorder(recStream, {mimeType:mime}) : new MediaRecorder(recStream);
@@ -2682,27 +2688,42 @@ function openStudy(id){
           resetRecBtn();
           const type = rec.mimeType || mime || "audio/mp4";
           const total = mediaChunks.reduce((a,c)=>a + c.size, 0);
-          if(!total){ out.textContent = "録音データが空でした。もう一度お試しください。"; return; }
+          if(!total){
+            out.textContent = (Date.now() - recStartedAt < 1000)
+              ? "録音が短すぎたようです。フレーズを声に出してから「録音を止める」を押してください。"
+              : "録音データが空でした。お手本の再生直後は少し間をおいて、もう一度お試しください。";
+            return;
+          }
           if(myUrl) URL.revokeObjectURL(myUrl);
           myUrl = URL.createObjectURL(new Blob(mediaChunks, {type}));
           playmineBtn.disabled = false; playmineBtn.style.opacity = 1;
           out.textContent = "録音できました。「自分の声」で聞き比べてみましょう。";
         };
         rec.onerror = ()=>{ resetRecBtn(); out.textContent = "録音中にエラーが起きました。もう一度お試しください。"; };
-        rec.start(250);
+        rec.start();
+        recStartedAt = Date.now();
         recBtn.textContent = "⏹ 録音を止める"; recBtn.classList.add("rec");
         out.textContent = "録音中…フレーズを声に出して、終わったら「録音を止める」を押してください。";
       }catch(e){ resetRecBtn(); out.textContent = "マイクが使えませんでした（ブラウザのマイク許可をご確認ください）。"; }
+      finally{ recStarting = false; }
     };
     checkBtn.onclick = ()=>{
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       if(!SR){ out.textContent = "このブラウザでは発音チェック（音声認識）が使えません。録音と聞き比べをご利用ください。"; return; }
-      if(activeSR){ try{ activeSR.r.stop(); }catch(e){} out.textContent = "聞き取りを終了しています…結果をお待ちください。"; return; }
+      if(activeSR){
+        const s0 = activeSR;
+        if(!s0.started){ s0.dead = true; activeSR = null; s0.btn.textContent = "🎤 発音チェック"; s0.out.textContent = "聞き取りを中止しました。"; return; }
+        try{ s0.r.stop(); }catch(e){}
+        s0.out.textContent = "聞き取りを終了しています…結果をお待ちください。";
+        return;
+      }
+      if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} }
+      try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
       const r = new SR(); r.lang = "en-US"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
-      const st = { r, got:false, err:"", last:"" };
+      const st = { r, got:false, err:"", last:"", btn:checkBtn, out, started:false, dead:false };
       activeSR = st;
       checkBtn.textContent = "⏹ 話し終わったら押す";
-      out.textContent = "🎤 聞き取り中…フレーズを話してください（話し終わると自動で判定します。ボタンでも止められます）。";
+      out.textContent = "🎤 準備中…合図が出たらフレーズを話してください。";
       const judge = heard=>{
         const norm = t => t.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(Boolean);
         const target = new Set(norm(ph.en)); const got = norm(heard);
@@ -2712,6 +2733,7 @@ function openStudy(id){
         out.textContent = `${mark}（認識結果： "${heard}"）`;
       };
       r.onresult = e=>{
+        if(st.dead) return;
         let finalT = "", interimT = "";
         for(let i = 0; i < e.results.length; i++){
           const res = e.results[i];
@@ -2720,19 +2742,29 @@ function openStudy(id){
         if(finalT){ st.got = true; st.last = finalT; judge(finalT); }
         else if(interimT){ st.last = interimT; }
       };
-      r.onerror = e=>{ st.err = (e && e.error) || ""; };
+      r.onerror = e=>{ if(!st.dead) st.err = (e && e.error) || ""; };
       r.onend = ()=>{
         if(activeSR === st) activeSR = null;
-        checkBtn.textContent = "🎤 発音チェック";
-        if(st.got) return;
+        st.btn.textContent = "🎤 発音チェック";
+        if(st.dead || st.got) return;
         if(st.last && st.err !== "not-allowed" && st.err !== "service-not-allowed"){ judge(st.last); return; }
-        if(st.err === "not-allowed" || st.err === "service-not-allowed") out.textContent = "マイク／音声認識の許可が必要です。iPhoneの「設定」とSafariの許可をご確認ください。";
-        else if(st.err === "no-speech") out.textContent = "声が聞き取れませんでした。マイクの近くでもう一度どうぞ。";
-        else if(st.err === "network") out.textContent = "通信エラーで聞き取れませんでした。電波のよい場所でもう一度どうぞ。";
-        else if(st.err && st.err !== "aborted") out.textContent = "うまく聞き取れませんでした。静かな場所でもう一度どうぞ。";
-        else out.textContent = "聞き取りが終わりましたが、結果が得られませんでした。フレーズを話し終わってからボタンを押して止めてみてください。";
+        if(st.err === "not-allowed" || st.err === "service-not-allowed") st.out.textContent = "マイク／音声認識の許可が必要です。iPhoneの「設定」とSafariの許可をご確認ください。";
+        else if(st.err === "no-speech") st.out.textContent = "声が聞き取れませんでした。マイクの近くでもう一度どうぞ。";
+        else if(st.err === "network") st.out.textContent = "通信エラーで聞き取れませんでした。電波のよい場所でもう一度どうぞ。";
+        else if(st.err && st.err !== "aborted") st.out.textContent = "うまく聞き取れませんでした。静かな場所でもう一度どうぞ。";
+        else st.out.textContent = "聞き取りが終わりましたが、結果が得られませんでした。フレーズを話し終わってからボタンを押して止めてみてください。";
       };
-      try{ r.start(); }catch(e){ activeSR = null; checkBtn.textContent = "🎤 発音チェック"; out.textContent = "音声認識を開始できませんでした。少し待ってもう一度どうぞ。"; }
+      setTimeout(()=>{
+        if(st.dead) return;
+        try{
+          r.start(); st.started = true;
+          st.out.textContent = "🎤 聞き取り中…フレーズを話してください（話し終わると自動で判定します。ボタンでも止められます）。";
+        }catch(e){
+          if(activeSR === st) activeSR = null;
+          st.btn.textContent = "🎤 発音チェック";
+          st.out.textContent = "音声認識を開始できませんでした。少し待ってもう一度どうぞ。";
+        }
+      }, 250);
     };
     list.appendChild(d);
   });
