@@ -2614,14 +2614,39 @@ function renderQuizQ(){
   $("#quizNext").onclick = ()=>{ quizState.idx++; renderQuizQ(); };
 }
 /* ================= 文法・フレーズ ================= */
-let mediaRec = null, mediaChunks = [], recPhraseIdx = null, recStream = null;
 let activeSR = null;
-let recStarting = false, recStartedAt = 0;
-function pickRecMime(){
-  if(typeof MediaRecorder === "undefined" || !MediaRecorder.isTypeSupported) return "";
-  const cands = ["audio/mp4", "audio/webm;codecs=opus", "audio/webm", "audio/ogg;codecs=opus", "audio/aac"];
-  for(const t of cands){ try{ if(MediaRecorder.isTypeSupported(t)) return t; }catch(e){} }
-  return "";
+let recSession = null, recStarting = false;
+function encodeWAV(samples, sampleRate){
+  const buffer = new ArrayBuffer(44 + samples.length * 2);
+  const v = new DataView(buffer);
+  const wstr = (off, s)=>{ for(let i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i)); };
+  wstr(0, "RIFF"); v.setUint32(4, 36 + samples.length * 2, true); wstr(8, "WAVEfmt ");
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, sampleRate, true); v.setUint32(28, sampleRate * 2, true);
+  v.setUint16(32, 2, true); v.setUint16(34, 16, true); wstr(36, "data");
+  v.setUint32(40, samples.length * 2, true);
+  let off = 44;
+  for(let i = 0; i < samples.length; i++, off += 2){
+    const s = Math.max(-1, Math.min(1, samples[i]));
+    v.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
+  }
+  return new Blob([buffer], {type:"audio/wav"});
+}
+function stopRecording(){
+  const s = recSession; if(!s) return;
+  recSession = null;
+  try{ s.proc.disconnect(); }catch(e){}
+  try{ s.src.disconnect(); }catch(e){}
+  if(s.stream){ s.stream.getTracks().forEach(t=>t.stop()); }
+  const rate = s.ctx.sampleRate;
+  try{ s.ctx.close(); }catch(e){}
+  const total = s.chunks.reduce((a,c)=>a + c.length, 0);
+  const merged = new Float32Array(total);
+  let off = 0;
+  for(const c of s.chunks){ merged.set(c, off); off += c.length; }
+  let peak = 0;
+  for(let i = 0; i < merged.length; i++){ const a = Math.abs(merged[i]); if(a > peak) peak = a; }
+  s.finish({ samples: merged, peak, rate, durMs: Date.now() - s.startedAt });
 }
 function openStudy(id){
   const s = storyById(id);
@@ -2667,41 +2692,34 @@ function openStudy(id){
       if(p && p.catch) p.catch(()=>{ out.textContent = "再生できませんでした。もう一度「録音する」から録り直してみてください。"; });
     };
     recBtn.onclick = async ()=>{
-      if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} return; }
+      if(recSession){ stopRecording(); return; }
       if(recStarting) return;
-      if(typeof MediaRecorder === "undefined" || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
+      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !(window.AudioContext || window.webkitAudioContext)){
         out.textContent = "このブラウザでは録音が使えませんでした。iPhoneの場合はSafariで開いてお試しください。"; return;
       }
       recStarting = true;
       try{
         try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
         if(activeSR){ const s0 = activeSR; activeSR = null; s0.dead = true; s0.btn.textContent = "🎤 発音チェック"; try{ s0.r.abort(); }catch(e){} }
-        recStream = await navigator.mediaDevices.getUserMedia({audio:true});
-        await new Promise(res=>setTimeout(res, 300));
-        mediaChunks = [];
-        const mime = pickRecMime();
-        mediaRec = mime ? new MediaRecorder(recStream, {mimeType:mime}) : new MediaRecorder(recStream);
-        const rec = mediaRec;
-        rec.ondataavailable = e=>{ if(e.data && e.data.size) mediaChunks.push(e.data); };
-        rec.onstop = ()=>{
-          if(recStream){ recStream.getTracks().forEach(t=>t.stop()); recStream = null; }
+        const stream = await navigator.mediaDevices.getUserMedia({audio:true});
+        const AC = window.AudioContext || window.webkitAudioContext;
+        const ctx = new AC();
+        if(ctx.state === "suspended"){ try{ await ctx.resume(); }catch(e){} }
+        await new Promise(res=>setTimeout(res, 200));
+        const srcNode = ctx.createMediaStreamSource(stream);
+        const proc = ctx.createScriptProcessor(4096, 1, 1);
+        const chunks = [];
+        proc.onaudioprocess = e=>{ chunks.push(new Float32Array(e.inputBuffer.getChannelData(0))); };
+        srcNode.connect(proc); proc.connect(ctx.destination);
+        recSession = { stream, ctx, src: srcNode, proc, chunks, startedAt: Date.now(), finish: ({samples, peak, rate})=>{
           resetRecBtn();
-          const type = rec.mimeType || mime || "audio/mp4";
-          const total = mediaChunks.reduce((a,c)=>a + c.size, 0);
-          if(!total){
-            out.textContent = (Date.now() - recStartedAt < 1000)
-              ? "録音が短すぎたようです。フレーズを声に出してから「録音を止める」を押してください。"
-              : "録音データが空でした。お手本の再生直後は少し間をおいて、もう一度お試しください。";
-            return;
-          }
+          if(!samples.length){ out.textContent = "録音データが空でした。もう一度お試しください。"; return; }
+          if(peak < 0.008){ out.textContent = "声が入っていないようでした。マイクに近づいて、もう一度お試しください。"; return; }
           if(myUrl) URL.revokeObjectURL(myUrl);
-          myUrl = URL.createObjectURL(new Blob(mediaChunks, {type}));
+          myUrl = URL.createObjectURL(encodeWAV(samples, rate));
           playmineBtn.disabled = false; playmineBtn.style.opacity = 1;
           out.textContent = "録音できました。「自分の声」で聞き比べてみましょう。";
-        };
-        rec.onerror = ()=>{ resetRecBtn(); out.textContent = "録音中にエラーが起きました。もう一度お試しください。"; };
-        rec.start();
-        recStartedAt = Date.now();
+        }};
         recBtn.textContent = "⏹ 録音を止める"; recBtn.classList.add("rec");
         out.textContent = "録音中…フレーズを声に出して、終わったら「録音を止める」を押してください。";
       }catch(e){ resetRecBtn(); out.textContent = "マイクが使えませんでした（ブラウザのマイク許可をご確認ください）。"; }
@@ -2717,7 +2735,7 @@ function openStudy(id){
         s0.out.textContent = "聞き取りを終了しています…結果をお待ちください。";
         return;
       }
-      if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} }
+      if(recSession) stopRecording();
       try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
       const r = new SR(); r.lang = "en-US"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
       const st = { r, got:false, err:"", last:"", btn:checkBtn, out, started:false, dead:false };
