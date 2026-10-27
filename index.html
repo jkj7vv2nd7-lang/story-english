@@ -2669,6 +2669,8 @@ function openStudy(id){
         out.textContent = "このブラウザでは録音が使えませんでした。iPhoneの場合はSafariで開いてお試しください。"; return;
       }
       recStarting = true;
+      out.textContent = "【診断】マイク取得中…";
+      const wd = setTimeout(()=>{ if(recStarting) out.textContent = "【診断】マイク取得の応答がありません（この文面をお知らせください）"; }, 4000);
       try{
         try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
         try{ myAudio.pause(); }catch(e){}
@@ -2687,6 +2689,7 @@ function openStudy(id){
             trk = stream.getAudioTracks()[0];
           }
         }
+        const micState = "マイク：" + trk.readyState + (trk.muted ? "／ミュート中" : "／正常");
         const recStream = new MediaStream([trk.clone()]);
         const cloneTrk = recStream.getAudioTracks()[0];
         mediaChunks = [];
@@ -2698,18 +2701,18 @@ function openStudy(id){
           try{ stream.getTracks().forEach(t=>t.stop()); }catch(e){}
           resetRecBtn();
           const total = mediaChunks.reduce((a,c)=>a + c.size, 0);
-          if(!total){ out.textContent = "録音が空でした（マイク状態：" + (trk.muted ? "ミュート中" : "正常") + "）。もう一度お試しください。"; return; }
+          if(!total){ out.textContent = "録音が空でした（" + micState + "／" + trk.readyState + "）。もう一度お試しください。"; return; }
           if(myUrl) URL.revokeObjectURL(myUrl);
           myUrl = URL.createObjectURL(new Blob(mediaChunks, {type: rec.mimeType || "audio/mp4"}));
           playmineBtn.disabled = false; playmineBtn.style.opacity = 1;
-          out.textContent = "録音できました。「自分の声」で聞き比べてみましょう。";
+          out.textContent = "録音できました。「自分の声」で聞き比べてみましょう。（データ：" + total + "バイト）";
         };
-        rec.onerror = ()=>{ resetRecBtn(); out.textContent = "録音中にエラーが起きました。もう一度お試しください。"; };
+        rec.onerror = (ev)=>{ resetRecBtn(); out.textContent = "録音中にエラーが起きました（" + ((ev && ev.error && ev.error.name) || "不明") + "）。もう一度お試しください。"; };
         rec.start();
         recBtn.textContent = "⏹ 録音を止める"; recBtn.classList.add("rec");
-        out.textContent = "録音中…フレーズを声に出して、終わったら「録音を止める」を押してください。";
-      }catch(e){ resetRecBtn(); out.textContent = "マイクが使えませんでした（ブラウザのマイク許可をご確認ください）。"; }
-      finally{ recStarting = false; }
+        out.textContent = "録音中…フレーズを声に出して、終わったら「録音を止める」を押してください。（" + micState + "）";
+      }catch(e){ resetRecBtn(); out.textContent = "マイクが使えませんでした（" + ((e && e.name) || "エラー") + "）。ブラウザのマイク許可をご確認ください。"; }
+      finally{ clearTimeout(wd); recStarting = false; }
     };
     checkBtn.onclick = ()=>{
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
@@ -2755,8 +2758,8 @@ function openStudy(id){
         if(st.err === "not-allowed" || st.err === "service-not-allowed") st.out.textContent = "マイク／音声認識の許可が必要です。iPhoneの「設定」とSafariの許可をご確認ください。";
         else if(st.err === "no-speech") st.out.textContent = "声が聞き取れませんでした。マイクの近くでもう一度どうぞ。";
         else if(st.err === "network") st.out.textContent = "通信エラーで聞き取れませんでした。電波のよい場所でもう一度どうぞ。";
-        else if(st.err && st.err !== "aborted") st.out.textContent = "うまく聞き取れませんでした。静かな場所でもう一度どうぞ。";
-        else st.out.textContent = "聞き取りが終わりましたが、結果が得られませんでした。フレーズを話し終わってからボタンを押して止めてみてください。";
+        else if(st.err && st.err !== "aborted") st.out.textContent = "うまく聞き取れませんでした。静かな場所でもう一度どうぞ。（エラー：" + st.err + "）";
+        else st.out.textContent = "聞き取りが終わりましたが、結果が得られませんでした。フレーズを話し終わってからボタンを押して止めてみてください。（エラー：" + (st.err || "なし") + "）";
       };
       setTimeout(()=>{
         if(st.dead) return;
