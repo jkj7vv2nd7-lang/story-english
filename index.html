@@ -2615,15 +2615,7 @@ function renderQuizQ(){
 }
 /* ================= 文法・フレーズ ================= */
 let activeSR = null;
-let mediaRec = null, mediaChunks = [], pageStream = null, recStarting = false;
-async function ensurePageStream(){
-  if(pageStream && pageStream.getTracks().some(t=>t.readyState === "live")) return pageStream;
-  pageStream = await navigator.mediaDevices.getUserMedia({audio:true});
-  return pageStream;
-}
-function releasePageStream(){
-  if(pageStream){ try{ pageStream.getTracks().forEach(t=>t.stop()); }catch(e){} pageStream = null; }
-}
+let mediaRec = null, mediaChunks = [], recStarting = false;
 function openStudy(id){
   const s = storyById(id);
   $("#studyMeta").textContent = `${s.title}｜${s.titleJa}`;
@@ -2655,7 +2647,10 @@ function openStudy(id){
       </div><div class="ja recog-out" style="min-height:16px"></div>`;
     const out = d.querySelector(".recog-out");
     const playmineBtn = d.querySelector('[data-act="playmine"]');
-    d.querySelector('[data-act="model"]').onclick = ()=>speakEn(ph.en, 0.92);
+    d.querySelector('[data-act="model"]').onclick = ()=>{
+      if(activeSR){ const s0 = activeSR; activeSR = null; s0.dead = true; s0.btn.textContent = "🎤 発音チェック"; try{ s0.r.abort(); }catch(e){} }
+      speakEn(ph.en, 0.92);
+    };
     const recBtn = d.querySelector('[data-act="rec"]');
     const checkBtn = d.querySelector('[data-act="check"]');
     let myUrl = null, myAudio = null;
@@ -2677,24 +2672,33 @@ function openStudy(id){
       try{
         try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
         try{ myAudio.pause(); }catch(e){}
-        if(activeSR){ const s0 = activeSR; activeSR = null; s0.dead = true; s0.btn.textContent = "🎤 発音チェック"; try{ s0.r.abort(); }catch(e){} }
-        const stream = await ensurePageStream();
-        const trk = stream.getAudioTracks()[0];
+        if(activeSR){ const s0 = activeSR; activeSR = null; s0.dead = true; s0.btn.textContent = "🎤 発音チェック"; try{ s0.r.abort(); }catch(e){} await new Promise(r=>setTimeout(r, 350)); }
+        let stream = await navigator.mediaDevices.getUserMedia({audio:true});
+        let trk = stream.getAudioTracks()[0];
         if(trk && trk.muted){
           out.textContent = "マイクを準備しています…";
-          await new Promise(res=>{
-            const to = setTimeout(()=>res(true), 1200);
+          const ok = await new Promise(res=>{
+            const to = setTimeout(()=>res(false), 2000);
             trk.addEventListener("unmute", ()=>{ clearTimeout(to); res(true); }, {once:true});
           });
+          if(!ok){
+            try{ stream.getTracks().forEach(t=>t.stop()); }catch(e){}
+            stream = await navigator.mediaDevices.getUserMedia({audio:true});
+            trk = stream.getAudioTracks()[0];
+          }
         }
+        const recStream = new MediaStream([trk.clone()]);
+        const cloneTrk = recStream.getAudioTracks()[0];
         mediaChunks = [];
-        mediaRec = new MediaRecorder(stream);
+        mediaRec = new MediaRecorder(recStream);
         const rec = mediaRec;
         rec.ondataavailable = e=>{ if(e.data && e.data.size) mediaChunks.push(e.data); };
         rec.onstop = ()=>{
+          try{ cloneTrk.stop(); }catch(e){}
+          try{ stream.getTracks().forEach(t=>t.stop()); }catch(e){}
           resetRecBtn();
           const total = mediaChunks.reduce((a,c)=>a + c.size, 0);
-          if(!total){ releasePageStream(); out.textContent = "録音が空でした。マイクをつなぎ直しましたので、もう一度「録音する」を押してください。"; return; }
+          if(!total){ out.textContent = "録音が空でした（マイク状態：" + (trk.muted ? "ミュート中" : "正常") + "）。もう一度お試しください。"; return; }
           if(myUrl) URL.revokeObjectURL(myUrl);
           myUrl = URL.createObjectURL(new Blob(mediaChunks, {type: rec.mimeType || "audio/mp4"}));
           playmineBtn.disabled = false; playmineBtn.style.opacity = 1;
@@ -2853,7 +2857,7 @@ $("#btnReviewCta").addEventListener("click", ()=>{ reviewState = null; renderVoc
 $$("[data-go]").forEach(b=>b.addEventListener("click", ()=>{ stopSpeak(); if(b.dataset.go === "view-home") renderHome(); showView(b.dataset.go); }));
 $("#btnReaderBack").addEventListener("click", ()=>{ stopSpeak(); if(cur) cur.playing = false; renderHome(); showView("view-home"); });
 $("#btnQuizBack").addEventListener("click", ()=>{ if(quizState) openStory(quizState.story.id); });
-$("#btnStudyBack").addEventListener("click", ()=>{ if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} } releasePageStream(); renderHome(); showView("view-home"); });
+$("#btnStudyBack").addEventListener("click", ()=>{ if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} } renderHome(); showView("view-home"); });
 $("#btnPlayAll").addEventListener("click", playAll);
 $("#btnRepeatSent").addEventListener("click", e=>{ cur.repeat = !cur.repeat; e.target.textContent = `🔂 1文リピート ${cur.repeat ? "ON" : "OFF"}`; e.target.classList.toggle("on", cur.repeat); });
 $("#btnTaishaku").addEventListener("click", ()=>{ ST.settings.taishaku = !ST.settings.taishaku; saveST(); applyTaishaku(); if(ST.settings.taishaku) toast("対訳を表示しました。まず英文で読み、確かめたい所だけ訳を見るのがおすすめです"); });
