@@ -2694,7 +2694,7 @@ function openStudy(id){
         rec.onstop = ()=>{
           resetRecBtn();
           const total = mediaChunks.reduce((a,c)=>a + c.size, 0);
-          if(!total){ out.textContent = "録音データが空でした。もう一度お試しください。"; return; }
+          if(!total){ releasePageStream(); out.textContent = "録音が空でした。マイクをつなぎ直しましたので、もう一度「録音する」を押してください。"; return; }
           if(myUrl) URL.revokeObjectURL(myUrl);
           myUrl = URL.createObjectURL(new Blob(mediaChunks, {type: rec.mimeType || "audio/mp4"}));
           playmineBtn.disabled = false; playmineBtn.style.opacity = 1;
