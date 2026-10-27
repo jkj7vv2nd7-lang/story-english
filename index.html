@@ -2698,14 +2698,12 @@ function openStudy(id){
       const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
       if(!SR){ out.textContent = "このブラウザでは発音チェック（音声認識）が使えません。録音と聞き比べをご利用ください。"; return; }
       if(activeSR){ try{ activeSR.r.stop(); }catch(e){} out.textContent = "聞き取りを終了しています…結果をお待ちください。"; return; }
-      const r = new SR(); r.lang = "en-US"; r.interimResults = false; r.continuous = false; r.maxAlternatives = 1;
-      const st = { r, got:false, err:"" };
+      const r = new SR(); r.lang = "en-US"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
+      const st = { r, got:false, err:"", last:"" };
       activeSR = st;
       checkBtn.textContent = "⏹ 話し終わったら押す";
-      out.textContent = "🎤 聞き取り中…フレーズを話してください（話し終わったら、もう一度ボタンを押してください）。";
-      r.onresult = e=>{
-        st.got = true;
-        const heard = e.results[0][0].transcript;
+      out.textContent = "🎤 聞き取り中…フレーズを話してください（話し終わると自動で判定します。ボタンでも止められます）。";
+      const judge = heard=>{
         const norm = t => t.toLowerCase().replace(/[^a-z0-9\s]/g, "").split(/\s+/).filter(Boolean);
         const target = new Set(norm(ph.en)); const got = norm(heard);
         const hit = got.filter(w=>target.has(w)).length;
@@ -2713,11 +2711,21 @@ function openStudy(id){
         const mark = ratio >= 0.8 ? "◎ よく伝わりました！" : ratio >= 0.5 ? "○ だいたい伝わっています" : "△ もう一度ゆっくり挑戦を";
         out.textContent = `${mark}（認識結果： "${heard}"）`;
       };
+      r.onresult = e=>{
+        let finalT = "", interimT = "";
+        for(let i = 0; i < e.results.length; i++){
+          const res = e.results[i];
+          if(res.isFinal) finalT = res[0].transcript; else interimT = res[0].transcript;
+        }
+        if(finalT){ st.got = true; st.last = finalT; judge(finalT); }
+        else if(interimT){ st.last = interimT; }
+      };
       r.onerror = e=>{ st.err = (e && e.error) || ""; };
       r.onend = ()=>{
         if(activeSR === st) activeSR = null;
         checkBtn.textContent = "🎤 発音チェック";
         if(st.got) return;
+        if(st.last && st.err !== "not-allowed" && st.err !== "service-not-allowed"){ judge(st.last); return; }
         if(st.err === "not-allowed" || st.err === "service-not-allowed") out.textContent = "マイク／音声認識の許可が必要です。iPhoneの「設定」とSafariの許可をご確認ください。";
         else if(st.err === "no-speech") out.textContent = "声が聞き取れませんでした。マイクの近くでもう一度どうぞ。";
         else if(st.err === "network") out.textContent = "通信エラーで聞き取れませんでした。電波のよい場所でもう一度どうぞ。";
