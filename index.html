@@ -2698,12 +2698,13 @@ function openStudy(id){
         out.textContent = "このブラウザでは録音が使えませんでした。iPhoneの場合はSafariで開いてお試しください。"; return;
       }
       recStarting = true;
+      const AC = window.AudioContext || window.webkitAudioContext;
+      const ctx = new AC();
+      try{ const rp = ctx.resume(); if(rp && rp.catch) rp.catch(()=>{}); }catch(e){}
       try{
         try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
         if(activeSR){ const s0 = activeSR; activeSR = null; s0.dead = true; s0.btn.textContent = "🎤 発音チェック"; try{ s0.r.abort(); }catch(e){} }
         const stream = await navigator.mediaDevices.getUserMedia({audio:true});
-        const AC = window.AudioContext || window.webkitAudioContext;
-        const ctx = new AC();
         if(ctx.state === "suspended"){ try{ await ctx.resume(); }catch(e){} }
         await new Promise(res=>setTimeout(res, 200));
         const srcNode = ctx.createMediaStreamSource(stream);
@@ -2722,7 +2723,7 @@ function openStudy(id){
         }};
         recBtn.textContent = "⏹ 録音を止める"; recBtn.classList.add("rec");
         out.textContent = "録音中…フレーズを声に出して、終わったら「録音を止める」を押してください。";
-      }catch(e){ resetRecBtn(); out.textContent = "マイクが使えませんでした（ブラウザのマイク許可をご確認ください）。"; }
+      }catch(e){ try{ ctx.close(); }catch(_){} resetRecBtn(); out.textContent = "マイクが使えませんでした（ブラウザのマイク許可をご確認ください）。"; }
       finally{ recStarting = false; }
     };
     checkBtn.onclick = ()=>{
