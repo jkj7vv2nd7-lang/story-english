@@ -2615,52 +2615,7 @@ function renderQuizQ(){
 }
 /* ================= 文法・フレーズ ================= */
 let activeSR = null;
-let liveRec = null, recStarting = false;
-let capGraph = null;
-let sharedCtx = null, sharedStream = null;
-function releaseMicStream(){
-  if(sharedStream){ try{ sharedStream.getTracks().forEach(t=>t.stop()); }catch(e){} sharedStream = null; }
-}
-function encodeWAV(samples, sampleRate){
-  const buffer = new ArrayBuffer(44 + samples.length * 2);
-  const v = new DataView(buffer);
-  const wstr = (off, s)=>{ for(let i = 0; i < s.length; i++) v.setUint8(off + i, s.charCodeAt(i)); };
-  wstr(0, "RIFF"); v.setUint32(4, 36 + samples.length * 2, true); wstr(8, "WAVEfmt ");
-  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
-  v.setUint32(24, sampleRate, true); v.setUint32(28, sampleRate * 2, true);
-  v.setUint16(32, 2, true); v.setUint16(34, 16, true); wstr(36, "data");
-  v.setUint32(40, samples.length * 2, true);
-  let off = 44;
-  for(let i = 0; i < samples.length; i++, off += 2){
-    const s = Math.max(-1, Math.min(1, samples[i]));
-    v.setInt16(off, s < 0 ? s * 0x8000 : s * 0x7FFF, true);
-  }
-  return new Blob([buffer], {type:"audio/wav"});
-}
-function teardownGraph(){
-  if(!capGraph) return;
-  try{ capGraph.proc.disconnect(); }catch(e){}
-  try{ capGraph.src.disconnect(); }catch(e){}
-  capGraph = null;
-}
-function stopRecording(){
-  const s = liveRec; if(!s) return;
-  liveRec = null;
-  const total = s.chunks.reduce((a,c)=>a + c.length, 0);
-  const merged = new Float32Array(total);
-  let off = 0;
-  for(const c of s.chunks){ merged.set(c, off); off += c.length; }
-  let peak = 0;
-  for(let i = 0; i < merged.length; i++){ const a = Math.abs(merged[i]); if(a > peak) peak = a; }
-  const rate = sharedCtx ? sharedCtx.sampleRate : 44100;
-  if(total && peak < 0.008){ teardownGraph(); releaseMicStream(); }
-  s.finish({ samples: merged, peak, rate, durMs: Date.now() - s.startedAt });
-}
-function teardownCapture(){
-  if(liveRec) stopRecording();
-  teardownGraph();
-  releaseMicStream();
-}
+let mediaRec = null, mediaChunks = [], recStream = null, recStarting = false;
 function openStudy(id){
   const s = storyById(id);
   $("#studyMeta").textContent = `${s.title}｜${s.titleJa}`;
@@ -2705,41 +2660,32 @@ function openStudy(id){
       if(p && p.catch) p.catch(()=>{ out.textContent = "再生できませんでした。もう一度「録音する」から録り直してみてください。"; });
     };
     recBtn.onclick = async ()=>{
-      if(liveRec){ stopRecording(); return; }
+      if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} return; }
       if(recStarting) return;
-      if(!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia || !(window.AudioContext || window.webkitAudioContext)){
+      if(typeof MediaRecorder === "undefined" || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia){
         out.textContent = "このブラウザでは録音が使えませんでした。iPhoneの場合はSafariで開いてお試しください。"; return;
       }
       recStarting = true;
-      const AC = window.AudioContext || window.webkitAudioContext;
-      let ctx = sharedCtx;
       try{
-        if(!ctx || ctx.state === "closed"){ ctx = new AC(); sharedCtx = ctx; }
-        try{ const rp = ctx.resume(); if(rp && rp.catch) rp.catch(()=>{}); }catch(e){}
         try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
         if(activeSR){ const s0 = activeSR; activeSR = null; s0.dead = true; s0.btn.textContent = "🎤 発音チェック"; try{ s0.r.abort(); }catch(e){} }
-        if(!sharedStream || sharedStream.getTracks().every(t=>t.readyState !== "live")){
-          releaseMicStream();
-          sharedStream = await navigator.mediaDevices.getUserMedia({audio:true});
-        }
-        if(ctx.state === "suspended" || ctx.state === "interrupted"){ try{ await ctx.resume(); }catch(e){} }
-        await new Promise(res=>setTimeout(res, 200));
-        if(!capGraph){
-          const srcNode = ctx.createMediaStreamSource(sharedStream);
-          const proc = ctx.createScriptProcessor(4096, 1, 1);
-          proc.onaudioprocess = e=>{ if(liveRec) liveRec.chunks.push(new Float32Array(e.inputBuffer.getChannelData(0))); };
-          srcNode.connect(proc); proc.connect(ctx.destination);
-          capGraph = { ctx, src: srcNode, proc };
-        }
-        liveRec = { chunks: [], startedAt: Date.now(), finish: ({samples, peak, rate})=>{
+        recStream = await navigator.mediaDevices.getUserMedia({audio:true});
+        mediaChunks = [];
+        mediaRec = new MediaRecorder(recStream);
+        const rec = mediaRec;
+        rec.ondataavailable = e=>{ if(e.data && e.data.size) mediaChunks.push(e.data); };
+        rec.onstop = ()=>{
+          if(recStream){ recStream.getTracks().forEach(t=>t.stop()); recStream = null; }
           resetRecBtn();
-          if(!samples.length){ out.textContent = "録音データが空でした。もう一度お試しください。"; return; }
-          if(peak < 0.008){ out.textContent = "声が入っていないようでした。マイクに近づいて、もう一度お試しください。"; return; }
+          const total = mediaChunks.reduce((a,c)=>a + c.size, 0);
+          if(!total){ out.textContent = "録音データが空でした。もう一度お試しください。"; return; }
           if(myUrl) URL.revokeObjectURL(myUrl);
-          myUrl = URL.createObjectURL(encodeWAV(samples, rate));
+          myUrl = URL.createObjectURL(new Blob(mediaChunks, {type: rec.mimeType || "audio/mp4"}));
           playmineBtn.disabled = false; playmineBtn.style.opacity = 1;
           out.textContent = "録音できました。「自分の声」で聞き比べてみましょう。";
-        }};
+        };
+        rec.onerror = ()=>{ resetRecBtn(); out.textContent = "録音中にエラーが起きました。もう一度お試しください。"; };
+        rec.start();
         recBtn.textContent = "⏹ 録音を止める"; recBtn.classList.add("rec");
         out.textContent = "録音中…フレーズを声に出して、終わったら「録音を止める」を押してください。";
       }catch(e){ resetRecBtn(); out.textContent = "マイクが使えませんでした（ブラウザのマイク許可をご確認ください）。"; }
@@ -2755,7 +2701,7 @@ function openStudy(id){
         s0.out.textContent = "聞き取りを終了しています…結果をお待ちください。";
         return;
       }
-      if(liveRec) stopRecording();
+      if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} }
       try{ if(window.speechSynthesis) speechSynthesis.cancel(); }catch(e){}
       const r = new SR(); r.lang = "en-US"; r.interimResults = true; r.continuous = false; r.maxAlternatives = 1;
       const st = { r, got:false, err:"", last:"", btn:checkBtn, out, started:false, dead:false };
@@ -2891,7 +2837,7 @@ $("#btnReviewCta").addEventListener("click", ()=>{ reviewState = null; renderVoc
 $$("[data-go]").forEach(b=>b.addEventListener("click", ()=>{ stopSpeak(); if(b.dataset.go === "view-home") renderHome(); showView(b.dataset.go); }));
 $("#btnReaderBack").addEventListener("click", ()=>{ stopSpeak(); if(cur) cur.playing = false; renderHome(); showView("view-home"); });
 $("#btnQuizBack").addEventListener("click", ()=>{ if(quizState) openStory(quizState.story.id); });
-$("#btnStudyBack").addEventListener("click", ()=>{ teardownCapture(); renderHome(); showView("view-home"); });
+$("#btnStudyBack").addEventListener("click", ()=>{ if(mediaRec && mediaRec.state === "recording"){ try{ mediaRec.stop(); }catch(e){} } renderHome(); showView("view-home"); });
 $("#btnPlayAll").addEventListener("click", playAll);
 $("#btnRepeatSent").addEventListener("click", e=>{ cur.repeat = !cur.repeat; e.target.textContent = `🔂 1文リピート ${cur.repeat ? "ON" : "OFF"}`; e.target.classList.toggle("on", cur.repeat); });
 $("#btnTaishaku").addEventListener("click", ()=>{ ST.settings.taishaku = !ST.settings.taishaku; saveST(); applyTaishaku(); if(ST.settings.taishaku) toast("対訳を表示しました。まず英文で読み、確かめたい所だけ訳を見るのがおすすめです"); });
